@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiquidQuoine.Net", "LiquidQuoine.Net\LiquidQuoine.Net.csproj", "{B308C2BE-43AF-455D-8B11-5D291AB80F75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiquidQuoine.Net.Tests", "LiquidQuoine.Net.Tests\LiquidQuoine.Net.Tests.csproj", "{3E7D7018-04BC-4208-8C53-FC3B6DE5FB49}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B308C2BE-43AF-455D-8B11-5D291AB80F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B308C2BE-43AF-455D-8B11-5D291AB80F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B308C2BE-43AF-455D-8B11-5D291AB80F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B308C2BE-43AF-455D-8B11-5D291AB80F75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E7D7018-04BC-4208-8C53-FC3B6DE5FB49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E7D7018-04BC-4208-8C53-FC3B6DE5FB49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E7D7018-04BC-4208-8C53-FC3B6DE5FB49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E7D7018-04BC-4208-8C53-FC3B6DE5FB49}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2A60D0F8-5365-40DB-874D-30363483F437}
+	EndGlobalSection
+EndGlobal
