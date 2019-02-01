@@ -12,7 +12,6 @@ namespace LiquidQuoine.Net
     {
         public LiquidQuoineAuthenticationProvider(ApiCredentials credentials) : base(credentials)
         {
-
         }
         public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, string method, Dictionary<string, object> parameters, bool signed)
         {
@@ -25,14 +24,13 @@ namespace LiquidQuoine.Net
             var header = new JwtHeader(signingCredentials);
             var payload = new JwtPayload
             {
-                { "path", uri},
-                { "nonce", (long)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds},
-                { "token_id", Credentials.Key.GetString()}
+                { "path", uri },
+                { "nonce", (long)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds },
+                { "token_id", Credentials.Key.GetString() }
             };
             var secToken = new JwtSecurityToken(header, payload);
             var handler = new JwtSecurityTokenHandler();
             var tokenString = handler.WriteToken(secToken);
-            Console.WriteLine(tokenString);
             result.Add("X-Quoine-Auth", tokenString);
             return result;
         }

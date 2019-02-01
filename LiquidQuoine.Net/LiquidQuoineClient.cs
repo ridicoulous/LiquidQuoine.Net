@@ -18,7 +18,7 @@ namespace LiquidQuoine.Net
     {
         private static LiquidQuoineClientOptions defaultOptions = new LiquidQuoineClientOptions();
         private static LiquidQuoineClientOptions DefaultOptions => defaultOptions.Copy<LiquidQuoineClientOptions>();
-
+        private const string GetAllProductsEndpoint = "products";
 
         private const string GetAllAccountsBalancesEndpoint = "accounts/balance";
 
@@ -61,11 +61,8 @@ namespace LiquidQuoine.Net
         #endregion
 
 
-        public async Task<CallResult<List<AccountBalance>>> GetAccountsBalancesAsync()
-        {          
-            var result = await ExecuteRequest<List<AccountBalance>>(GetUrl(GetAllAccountsBalancesEndpoint), "GET", null, true).ConfigureAwait(false);
-            return new CallResult<List<AccountBalance>>(result.Data, result.Error);
-        }
+        
+        #region Basic methods
         protected override IRequest ConstructRequest(Uri uri, string method, Dictionary<string, object> parameters, bool signed)
         {
             if (parameters == null)
@@ -127,6 +124,28 @@ namespace LiquidQuoine.Net
         protected Uri GetUrl(string endpoint, string version = null)
         {
             return version == null ? new Uri($"{BaseAddress}/{endpoint}") : new Uri($"{BaseAddress}/v{version}/{endpoint}");
+        }
+        #endregion
+        public  CallResult<List<LiquidQouineAccountBalance>> GetAccountsBalances() => GetAccountsBalancesAsync().Result;
+        public async Task<CallResult<List<LiquidQouineAccountBalance>>> GetAccountsBalancesAsync()
+        {
+            var result = await ExecuteRequest<List<LiquidQouineAccountBalance>>(GetUrl(GetAllAccountsBalancesEndpoint), "GET", null, true).ConfigureAwait(false);
+            return new CallResult<List<LiquidQouineAccountBalance>>(result.Data, result.Error);
+        }
+        /// <summary>
+        /// Get the list of all available products.
+        /// </summary>
+        /// <returns></returns>
+        public CallResult<List<LiquidQuoineProduct>> GetAllProducts() => GetAllProductsAsync().Result;
+       
+        /// <summary>
+        /// Get the list of all available products.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<CallResult<List<LiquidQuoineProduct>>> GetAllProductsAsync()
+        {
+            var result = await ExecuteRequest<List<LiquidQuoineProduct>>(GetUrl(GetAllProductsEndpoint), "GET", null, true).ConfigureAwait(false);
+            return new CallResult<List<LiquidQuoineProduct>>(result.Data, result.Error);
         }
     }
 }
