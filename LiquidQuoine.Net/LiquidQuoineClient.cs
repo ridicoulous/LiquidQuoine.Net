@@ -1,10 +1,12 @@
 ﻿using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
+using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using LiquidQuoine.Net;
 using LiquidQuoine.Net.Interfaces;
 using LiquidQuoine.Net.Objects;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -189,6 +191,26 @@ namespace LiquidQuoine.Net
            
             var result = await ExecuteRequest<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(GetUrl(GetExecutionsEndpoint), "GET", parameters).ConfigureAwait(false);
             return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(result.Data, result.Error);
+        }
+        /// <summary>
+        /// Get a list of recent executions from a product (Executions are sorted in DESCENDING order - Latest first)
+        /// </summary>
+        /// <param name="id">Product Id</param>
+        /// <param name="limit">How many executions should be returned. Must be <= 1000. Default is 20</param>
+        /// <param name="page">Page number from all results</param>
+        /// <returns></returns>
+        public CallResult<List<LiquidQuoineExecution>> GetExecutions(int productId, DateTime dateFrom, int? limit = null) => GetExecutionsAsync(productId, dateFrom, limit).Result;
+
+        public async Task<CallResult<List<LiquidQuoineExecution>>> GetExecutionsAsync(int productId, DateTime startTime, int? limit = null)
+        {
+            var parameters = new Dictionary<string, object>() {
+                { "product_id", productId },
+                { "timestamp", JsonConvert.SerializeObject(startTime, new TimestampSecondsConverter()) }
+            };         
+            parameters.AddOptionalParameter("limit", limit);
+
+            var result = await ExecuteRequest<List<LiquidQuoineExecution>>(GetUrl(GetExecutionsEndpoint), "GET", parameters).ConfigureAwait(false);
+            return new CallResult<List<LiquidQuoineExecution>>(result.Data, result.Error);
         }
     }
 }
