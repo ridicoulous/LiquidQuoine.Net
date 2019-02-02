@@ -19,6 +19,10 @@ namespace LiquidQuoine.Net
         private static LiquidQuoineClientOptions defaultOptions = new LiquidQuoineClientOptions();
         private static LiquidQuoineClientOptions DefaultOptions => defaultOptions.Copy<LiquidQuoineClientOptions>();
         private const string GetAllProductsEndpoint = "products";
+        private const string GetProductEndpoint = "products/{}";
+        private const string GetOrderBookEndpoint = "products/{}/price_levels";
+
+
 
         private const string GetAllAccountsBalancesEndpoint = "accounts/balance";
 
@@ -146,6 +150,23 @@ namespace LiquidQuoine.Net
         {
             var result = await ExecuteRequest<List<LiquidQuoineProduct>>(GetUrl(GetAllProductsEndpoint), "GET", null, true).ConfigureAwait(false);
             return new CallResult<List<LiquidQuoineProduct>>(result.Data, result.Error);
+        }
+
+        public CallResult<LiquidQuoineProduct> GetProduct(int id) => GetProductAsync(id).Result;
+
+        public async Task<CallResult<LiquidQuoineProduct>> GetProductAsync(int id)
+        {
+            var result = await ExecuteRequest<LiquidQuoineProduct>(GetUrl(FillPathParameter(GetProductEndpoint,id.ToString())), "GET", null, true).ConfigureAwait(false);
+            return new CallResult<LiquidQuoineProduct>(result.Data, result.Error);
+        }
+
+        public CallResult<LiquidQuoineOrderBook> GetOrderBook(int id, bool full=false) => GetOrderBookAsync(id,full).Result;
+
+        public async Task<CallResult<LiquidQuoineOrderBook>> GetOrderBookAsync(int id, bool fullOrderbook=false)
+        {
+            string url = fullOrderbook ?  GetOrderBookEndpoint + "?full=1": GetOrderBookEndpoint;
+            var result = await ExecuteRequest<LiquidQuoineOrderBook>(GetUrl(FillPathParameter(url, id.ToString())), "GET", null, true).ConfigureAwait(false);
+            return new CallResult<LiquidQuoineOrderBook>(result.Data, result.Error);
         }
     }
 }

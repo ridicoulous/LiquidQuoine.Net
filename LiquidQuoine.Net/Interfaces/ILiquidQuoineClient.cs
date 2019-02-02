@@ -1,9 +1,7 @@
 ﻿using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using LiquidQuoine.Net.Objects;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LiquidQuoine.Net.Interfaces
@@ -15,7 +13,7 @@ namespace LiquidQuoine.Net.Interfaces
         /// </summary>
         /// <param name="apiKey">The api key</param>
         /// <param name="apiSecret">The api secret</param>
-        void SetApiCredentials(string apiKey, string apiSecret);   
+        void SetApiCredentials(string apiKey, string apiSecret);
 
 
         RateLimitingBehaviour RateLimitBehaviour { get; }
@@ -32,6 +30,7 @@ namespace LiquidQuoine.Net.Interfaces
         /// Removes all rate limiters from this client
         /// </summary>
         void RemoveRateLimiters();
+
         /// <summary>
         /// Get the list of all available products.
         /// </summary>
@@ -42,9 +41,31 @@ namespace LiquidQuoine.Net.Interfaces
         /// </summary>
         /// <returns></returns>
         Task<CallResult<List<LiquidQuoineProduct>>> GetAllProductsAsync();
+        /// <summary>
+        /// Get product by id
+        /// </summary>
+        /// <returns></returns>
+        CallResult<LiquidQuoineProduct> GetProduct(int id);
+        /// <summary>
+        /// Get product by id
+        /// </summary>
+        /// <returns></returns>
+        Task<CallResult<LiquidQuoineProduct>> GetProductAsync(int id);
 
-
-
+        /// <summary>
+        /// Get orderbook.
+        /// </summary>
+        /// <param name="id">Product id</param>
+        /// <param name="full">if true, returns full order book, else first 20 levels</param>
+        /// <returns></returns>
+        CallResult<LiquidQuoineOrderBook> GetOrderBook(int id, bool full);
+        /// <summary>
+        /// Get orderbook.
+        /// </summary>
+        /// <param name="id">Product id</param>
+        /// <param name="full">if true, returns full order book, else first 20 levels</param>
+        /// <returns></returns>
+        Task<CallResult<LiquidQuoineOrderBook>> GetOrderBookAsync(int id, bool full);
 
         /// <summary>
         /// Ping to see if the server is reachable

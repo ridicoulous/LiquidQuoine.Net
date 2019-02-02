@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiquidQuoine.Net", "LiquidQuoine.Net\LiquidQuoine.Net.csproj", "{B308C2BE-43AF-455D-8B11-5D291AB80F75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiquidQuoine.Net", "LiquidQuoine.Net\LiquidQuoine.Net.csproj", "{B308C2BE-43AF-455D-8B11-5D291AB80F75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiquidQuoine.Net.Tests", "LiquidQuoine.Net.Tests\LiquidQuoine.Net.Tests.csproj", "{3E7D7018-04BC-4208-8C53-FC3B6DE5FB49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiquidQuoine.Net.Tests", "LiquidQuoine.Net.Tests\LiquidQuoine.Net.Tests.csproj", "{3E7D7018-04BC-4208-8C53-FC3B6DE5FB49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
