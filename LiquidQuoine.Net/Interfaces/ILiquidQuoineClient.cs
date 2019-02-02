@@ -52,20 +52,16 @@ namespace LiquidQuoine.Net.Interfaces
         /// <returns></returns>
         Task<CallResult<LiquidQuoineProduct>> GetProductAsync(int id);
 
-        /// <summary>
-        /// Get orderbook.
-        /// </summary>
-        /// <param name="id">Product id</param>
-        /// <param name="full">if true, returns full order book, else first 20 levels</param>
-        /// <returns></returns>
+     
         CallResult<LiquidQuoineOrderBook> GetOrderBook(int id, bool full);
-        /// <summary>
-        /// Get orderbook.
-        /// </summary>
-        /// <param name="id">Product id</param>
-        /// <param name="full">if true, returns full order book, else first 20 levels</param>
-        /// <returns></returns>
+        CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetExecutions(int id, int? limit = null, int? page = null);
+
+      
+        Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetExecutionsAsync(int id, int? limit=null, int? page=null);
+
+
         Task<CallResult<LiquidQuoineOrderBook>> GetOrderBookAsync(int id, bool full);
+
 
         /// <summary>
         /// Ping to see if the server is reachable

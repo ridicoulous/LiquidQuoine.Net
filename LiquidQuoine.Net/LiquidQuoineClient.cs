@@ -21,6 +21,8 @@ namespace LiquidQuoine.Net
         private const string GetAllProductsEndpoint = "products";
         private const string GetProductEndpoint = "products/{}";
         private const string GetOrderBookEndpoint = "products/{}/price_levels";
+        private const string GetExecutionsEndpoint = "executions";
+
 
 
 
@@ -156,17 +158,37 @@ namespace LiquidQuoine.Net
 
         public async Task<CallResult<LiquidQuoineProduct>> GetProductAsync(int id)
         {
-            var result = await ExecuteRequest<LiquidQuoineProduct>(GetUrl(FillPathParameter(GetProductEndpoint,id.ToString())), "GET", null, true).ConfigureAwait(false);
+            var result = await ExecuteRequest<LiquidQuoineProduct>(GetUrl(FillPathParameter(GetProductEndpoint,id.ToString())), "GET").ConfigureAwait(false);
             return new CallResult<LiquidQuoineProduct>(result.Data, result.Error);
         }
 
         public CallResult<LiquidQuoineOrderBook> GetOrderBook(int id, bool full=false) => GetOrderBookAsync(id,full).Result;
-
+         
         public async Task<CallResult<LiquidQuoineOrderBook>> GetOrderBookAsync(int id, bool fullOrderbook=false)
-        {
-            string url = fullOrderbook ?  GetOrderBookEndpoint + "?full=1": GetOrderBookEndpoint;
-            var result = await ExecuteRequest<LiquidQuoineOrderBook>(GetUrl(FillPathParameter(url, id.ToString())), "GET", null, true).ConfigureAwait(false);
+        {          
+            var parameters = new Dictionary<string, object>();
+            if (fullOrderbook)
+                parameters.Add("full", 1);
+            var result = await ExecuteRequest<LiquidQuoineOrderBook>(GetUrl(FillPathParameter(GetOrderBookEndpoint, id.ToString())), "GET", parameters).ConfigureAwait(false);
             return new CallResult<LiquidQuoineOrderBook>(result.Data, result.Error);
+        }
+        /// <summary>
+        /// Get a list of recent executions from a product (Executions are sorted in DESCENDING order - Latest first)
+        /// </summary>
+        /// <param name="id">Product Id</param>
+        /// <param name="limit">How many executions should be returned. Must be <= 1000. Default is 20</param>
+        /// <param name="page">Page number from all results</param>
+        /// <returns></returns>
+        public CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetExecutions(int id, int? limit = null, int? page = null) => GetExecutionsAsync(id, limit, page).Result;
+
+        public async Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetExecutionsAsync(int id, int? limit = null, int? page = null)
+        {
+            var parameters = new Dictionary<string, object>() { { "product_id",id } };
+            parameters.AddOptionalParameter("limit", limit);
+            parameters.AddOptionalParameter("page", page);
+           
+            var result = await ExecuteRequest<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(GetUrl(GetExecutionsEndpoint), "GET", parameters).ConfigureAwait(false);
+            return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(result.Data, result.Error);
         }
     }
 }

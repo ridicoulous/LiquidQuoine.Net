@@ -45,5 +45,15 @@ namespace LuqidExchange.Net.Tests
             Assert.True(result.Data != null);
             Assert.True(result.Data.SellPriceLevels.Any()||result.Data.BuyPriceLevels.Any());
         }
+        [Theory]
+        [InlineData(5)]
+        [InlineData(1)]
+        public void Should_Return_Executions(int id)
+        {
+            var result = client.GetExecutions(id);
+            Assert.True(result.Success);
+            Assert.True(result.Data != null);
+          //  Assert.True(result.Data.SellPriceLevels.Any() || result.Data.BuyPriceLevels.Any());
+        }
     }
 }
