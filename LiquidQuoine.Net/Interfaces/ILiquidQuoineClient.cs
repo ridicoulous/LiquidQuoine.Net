@@ -54,13 +54,26 @@ namespace LiquidQuoine.Net.Interfaces
 
      
         CallResult<LiquidQuoineOrderBook> GetOrderBook(int id, bool full);
-        CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetExecutions(int id, int? limit = null, int? page = null);
+        Task<CallResult<LiquidQuoineOrderBook>> GetOrderBookAsync(int id, bool full);
 
+        CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetExecutions(int id, int? limit = null, int? page = null);
       
         Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetExecutionsAsync(int id, int? limit=null, int? page=null);
+        CallResult<LiquidQuoineInterestRate> GetInterestRates(string currency);
+        Task<CallResult<LiquidQuoineInterestRate>> GetInterestRatesAsync(string currency);
 
 
-        Task<CallResult<LiquidQuoineOrderBook>> GetOrderBookAsync(int id, bool full);
+        CallResult<LiquidQuoinePlacedOrder> PlaceOrder(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal price, decimal? priceRange = null);
+
+        Task<CallResult<LiquidQuoinePlacedOrder>> PlaceOrderAsync(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal price, decimal? priceRange=null);
+        CallResult<LiquidQuoinePlacedOrder> PlaceMarginOrder(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null,OrderDirection? orderDirection = null);
+
+        Task<CallResult<LiquidQuoinePlacedOrder>> PlaceMarginOrderAsync(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency,  decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection = null);
+
+        CallResult<LiquidQuoinePlacedOrder> GetOrder(long orderId);
+
+        Task<CallResult<LiquidQuoinePlacedOrder>> GetOrderAsync(long orderId);
+
 
 
         /// <summary>

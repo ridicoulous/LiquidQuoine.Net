@@ -36,7 +36,12 @@ namespace LiquidQuoine.Net.Converters
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            if (value != null)
+            {
+                var text = value.ToString();
+                writer.WriteValue(text);
+            }
+
         }
     }
 }

@@ -13,10 +13,10 @@ namespace LiquidQuoine.Net.Objects
         [JsonProperty("price"), JsonConverter(typeof(StringToDecimalConverter))]
         public decimal Price { get; set; }
 
-        [JsonProperty("taker_side")]
-        public string TakerSide { get; set; }
-        [JsonProperty("created_at"), JsonConverter(typeof(TimestampSecondsConverter))]
-        public DateTime CreatedAt { get; set; }
+        [JsonProperty("taker_side"), JsonConverter(typeof(OrderSideConverter))]
+        public OrderSide TakerSide { get; set; }
+        //[JsonProperty("created_at"), JsonConverter(typeof(TimestampSecondsConverter))]
+        //public DateTime CreatedAt { get; set; }
 
     }
 }

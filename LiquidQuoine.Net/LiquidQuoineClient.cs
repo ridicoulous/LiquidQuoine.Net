@@ -3,7 +3,7 @@ using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
-using LiquidQuoine.Net;
+using LiquidQuoine.Net.Converters;
 using LiquidQuoine.Net.Interfaces;
 using LiquidQuoine.Net.Objects;
 using Newtonsoft.Json;
@@ -11,7 +11,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LiquidQuoine.Net
@@ -24,11 +23,13 @@ namespace LiquidQuoine.Net
         private const string GetProductEndpoint = "products/{}";
         private const string GetOrderBookEndpoint = "products/{}/price_levels";
         private const string GetExecutionsEndpoint = "executions";
-
-
-
-
+        private const string GetInterestRatesEndpoint = "ir_ladders/{}";
         private const string GetAllAccountsBalancesEndpoint = "accounts/balance";
+        private const string PlaceOrderEndpoint = "orders";
+        private const string GetOrderEndpoint = "orders/{}";
+
+
+
 
 
         #region constructor/destructor
@@ -69,7 +70,7 @@ namespace LiquidQuoine.Net
         #endregion
 
 
-        
+
         #region Basic methods
         protected override IRequest ConstructRequest(Uri uri, string method, Dictionary<string, object> parameters, bool signed)
         {
@@ -77,9 +78,6 @@ namespace LiquidQuoine.Net
                 parameters = new Dictionary<string, object>();
 
             var uriString = uri.ToString();
-            //if (authProvider != null)
-            //    parameters = authProvider.AddAuthenticationToParameters(uriString, method, parameters, signed);
-            //string pathEndQuery = String.Empty;
             if ((method == Constants.GetMethod || method == Constants.DeleteMethod || postParametersPosition == PostParameters.InUri) && parameters?.Any() == true)
             {
                 uriString += "?" + parameters.CreateParamString(true);
@@ -108,7 +106,7 @@ namespace LiquidQuoine.Net
             if ((method == Constants.PostMethod || method == Constants.PutMethod) && postParametersPosition != PostParameters.InUri)
             {
                 if (parameters?.Any() == true)
-                    WriteParamBody(request, parameters);
+                    WriteParamBody(request, JsonConvert.SerializeObject(parameters));
                 else
                     WriteParamBody(request, "{}");
             }
@@ -118,9 +116,9 @@ namespace LiquidQuoine.Net
 
         protected override bool IsErrorResponse(JToken data)
         {
-            return data.ToString().Contains("errors")|| data.ToString().Contains("message");
+            return data.ToString().Contains("errors") || data.ToString().Contains("message");
         }
-        
+
         protected override Error ParseErrorResponse(JToken error)
         {
             if (error["errors"] == null)
@@ -134,7 +132,7 @@ namespace LiquidQuoine.Net
             return version == null ? new Uri($"{BaseAddress}/{endpoint}") : new Uri($"{BaseAddress}/v{version}/{endpoint}");
         }
         #endregion
-        public  CallResult<List<LiquidQouineAccountBalance>> GetAccountsBalances() => GetAccountsBalancesAsync().Result;
+        public CallResult<List<LiquidQouineAccountBalance>> GetAccountsBalances() => GetAccountsBalancesAsync().Result;
         public async Task<CallResult<List<LiquidQouineAccountBalance>>> GetAccountsBalancesAsync()
         {
             var result = await ExecuteRequest<List<LiquidQouineAccountBalance>>(GetUrl(GetAllAccountsBalancesEndpoint), "GET", null, true).ConfigureAwait(false);
@@ -145,7 +143,7 @@ namespace LiquidQuoine.Net
         /// </summary>
         /// <returns></returns>
         public CallResult<List<LiquidQuoineProduct>> GetAllProducts() => GetAllProductsAsync().Result;
-       
+
         /// <summary>
         /// Get the list of all available products.
         /// </summary>
@@ -160,14 +158,14 @@ namespace LiquidQuoine.Net
 
         public async Task<CallResult<LiquidQuoineProduct>> GetProductAsync(int id)
         {
-            var result = await ExecuteRequest<LiquidQuoineProduct>(GetUrl(FillPathParameter(GetProductEndpoint,id.ToString())), "GET").ConfigureAwait(false);
+            var result = await ExecuteRequest<LiquidQuoineProduct>(GetUrl(FillPathParameter(GetProductEndpoint, id.ToString())), "GET").ConfigureAwait(false);
             return new CallResult<LiquidQuoineProduct>(result.Data, result.Error);
         }
 
-        public CallResult<LiquidQuoineOrderBook> GetOrderBook(int id, bool full=false) => GetOrderBookAsync(id,full).Result;
-         
-        public async Task<CallResult<LiquidQuoineOrderBook>> GetOrderBookAsync(int id, bool fullOrderbook=false)
-        {          
+        public CallResult<LiquidQuoineOrderBook> GetOrderBook(int id, bool full = false) => GetOrderBookAsync(id, full).Result;
+
+        public async Task<CallResult<LiquidQuoineOrderBook>> GetOrderBookAsync(int id, bool fullOrderbook = false)
+        {
             var parameters = new Dictionary<string, object>();
             if (fullOrderbook)
                 parameters.Add("full", 1);
@@ -185,10 +183,10 @@ namespace LiquidQuoine.Net
 
         public async Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetExecutionsAsync(int id, int? limit = null, int? page = null)
         {
-            var parameters = new Dictionary<string, object>() { { "product_id",id } };
+            var parameters = new Dictionary<string, object>() { { "product_id", id } };
             parameters.AddOptionalParameter("limit", limit);
             parameters.AddOptionalParameter("page", page);
-           
+
             var result = await ExecuteRequest<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(GetUrl(GetExecutionsEndpoint), "GET", parameters).ConfigureAwait(false);
             return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(result.Data, result.Error);
         }
@@ -206,11 +204,81 @@ namespace LiquidQuoine.Net
             var parameters = new Dictionary<string, object>() {
                 { "product_id", productId },
                 { "timestamp", JsonConvert.SerializeObject(startTime, new TimestampSecondsConverter()) }
-            };         
+            };
             parameters.AddOptionalParameter("limit", limit);
 
             var result = await ExecuteRequest<List<LiquidQuoineExecution>>(GetUrl(GetExecutionsEndpoint), "GET", parameters).ConfigureAwait(false);
             return new CallResult<List<LiquidQuoineExecution>>(result.Data, result.Error);
+        }
+
+        public CallResult<LiquidQuoineInterestRate> GetInterestRates(string currency) => GetInterestRatesAsync(currency).Result;
+
+        public async Task<CallResult<LiquidQuoineInterestRate>> GetInterestRatesAsync(string currency)
+        {
+            var result = await ExecuteRequest<LiquidQuoineInterestRate>(GetUrl(FillPathParameter(GetInterestRatesEndpoint, currency)), "GET").ConfigureAwait(false);
+            return new CallResult<LiquidQuoineInterestRate>(result.Data, result.Error);
+        }
+
+        public CallResult<LiquidQuoinePlacedOrder> PlaceOrder(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal price, decimal? priceRange = null) => PlaceOrderAsync(productId, orderSide, orderType, quantity, price, priceRange).Result;
+        public async Task<CallResult<LiquidQuoinePlacedOrder>> PlaceOrderAsync(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal price, decimal? priceRange = null)
+        {
+            var parameters = new Dictionary<string, object>()
+            {
+                { "order_type", JsonConvert.SerializeObject(orderType,new OrderTypeConverter())},
+                { "product_id", productId},
+                { "side", JsonConvert.SerializeObject(orderSide,new OrderSideConverter())},
+                { "quantity", JsonConvert.SerializeObject(quantity,new StringToDecimalConverter())},
+                { "price", JsonConvert.SerializeObject(price,new StringToDecimalConverter())}
+            };
+            if (priceRange.HasValue && orderType != OrderType.MarketWithRange)
+            {
+                throw new Exception("priceRange parameter can be used only for OrderType.MarketWithRange only, slippage of the order.");
+            }
+            parameters.AddOptionalParameter("price_range", JsonConvert.SerializeObject(priceRange, new StringToDecimalConverter()));
+            var result = await ExecuteRequest<LiquidQuoinePlacedOrder>(GetUrl(PlaceOrderEndpoint), "POST", parameters, true).ConfigureAwait(false);
+            return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
+        }
+
+        public CallResult<LiquidQuoinePlacedOrder> PlaceMarginOrder(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<CallResult<LiquidQuoinePlacedOrder>> PlaceMarginOrderAsync(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection=null)
+        {
+            var parameters = new Dictionary<string, object>()
+            {
+                { "order_type", JsonConvert.SerializeObject(orderType,new OrderTypeConverter())},
+                { "product_id", productId},
+                { "side", JsonConvert.SerializeObject(orderSide,new OrderSideConverter())},
+                { "quantity", JsonConvert.SerializeObject(quantity,new StringToDecimalConverter())},
+                { "price", JsonConvert.SerializeObject(price,new StringToDecimalConverter())},
+                { "leverage_level", JsonConvert.SerializeObject(leverageLevel)},
+                { "funding_currency", fundingCurrency},
+             //   { "order_direction", JsonConvert.SerializeObject(leverageLevel)},
+
+
+            };
+            if (priceRange.HasValue && orderType != OrderType.MarketWithRange)
+            {
+                throw new Exception("priceRange parameter can be used for OrderType.MarketWithRange only, slippage of the order.");
+            }
+            parameters.AddOptionalParameter("price_range", JsonConvert.SerializeObject(priceRange, new StringToDecimalConverter()));
+            parameters.AddOptionalParameter("order_direction", JsonConvert.SerializeObject(orderDirection, new StringToDecimalConverter()));
+
+            var result = await ExecuteRequest<LiquidQuoinePlacedOrder>(GetUrl(PlaceOrderEndpoint), "POST", parameters, true).ConfigureAwait(false);
+            return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
+
+        }
+
+        public CallResult<LiquidQuoinePlacedOrder> GetOrder(long orderId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<CallResult<LiquidQuoinePlacedOrder>> GetOrderAsync(long orderId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

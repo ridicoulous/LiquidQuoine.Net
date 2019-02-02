@@ -1,4 +1,6 @@
 using LiquidQuoine.Net;
+using LiquidQuoine.Net.Objects;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using Xunit;
@@ -59,6 +61,16 @@ namespace LuqidExchange.Net.Tests
             var result = client.GetExecutions(pair,DateTime.UtcNow.AddDays(-2),4);
             Assert.True(result.Success);
             Assert.True(result.Data != null);
+        }
+        [Theory]
+        [InlineData("USD")]
+        public void Should_Return_InterestRates(string pair)
+        {
+            var t = new LiquidQuoinePlacedOrder() {LeverageLevel = LeverageLevel.Level10 };
+            Console.WriteLine(JsonConvert.SerializeObject(t));
+            var result = client.GetInterestRates(pair);
+            Assert.True(result.Success);
+            Assert.True(result.Data!=null);
         }
     }
 }
