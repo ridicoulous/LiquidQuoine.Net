@@ -27,6 +27,8 @@ namespace LiquidQuoine.Net
         private const string GetAllAccountsBalancesEndpoint = "accounts/balance";
         private const string PlaceOrderEndpoint = "orders";
         private const string GetOrderEndpoint = "orders/{}";
+        private const string GetOrdersEndpoint = "orders";
+
 
 
 
@@ -273,6 +275,19 @@ namespace LiquidQuoine.Net
             return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
         }
 
+        public CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>> GetOrders(string fundingCurrency = null, int? productId = null, OrderStatus? status = null, bool withDetails = false) =>
+            GetOrdersAsync(fundingCurrency, productId, status, withDetails).Result;
 
+        public async Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>> GetOrdersAsync(string fundingCurrency = null, int? productId = null, OrderStatus? status = null, bool withDetails = false)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("funding_currency", fundingCurrency);
+            parameters.AddOptionalParameter("product_id", productId);
+            parameters.AddOptionalParameter("status", JsonConvert.SerializeObject(status,new OrderStatusConverter()));
+            if (withDetails)
+                parameters.AddParameter("with_details", 1);
+            var result = await ExecuteRequest<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>(GetUrl(GetOrdersEndpoint), "GET", parameters, true).ConfigureAwait(false);
+            return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>(result.Data, result.Error);
+        }
     }
 }

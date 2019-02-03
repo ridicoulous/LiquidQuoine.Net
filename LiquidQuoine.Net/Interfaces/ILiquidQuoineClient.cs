@@ -52,8 +52,19 @@ namespace LiquidQuoine.Net.Interfaces
         /// <returns></returns>
         Task<CallResult<LiquidQuoineProduct>> GetProductAsync(int id);
 
-     
+        /// <summary>
+        /// Get Order Book
+        /// </summary>
+        /// <param name="id">Product ID</param>
+        /// <param name="full">Set true to get all price levels (default is 20 each side)</param>
+        /// <returns>LiquidQuoineOrderBook</returns>
         CallResult<LiquidQuoineOrderBook> GetOrderBook(int id, bool full);
+        /// <summary>
+        /// Get Order Book
+        /// </summary>
+        /// <param name="id">Product ID</param>
+        /// <param name="full">Set true to get all price levels (default is 20 each side)</param>
+        /// <returns>LiquidQuoineOrderBook</returns>
         Task<CallResult<LiquidQuoineOrderBook>> GetOrderBookAsync(int id, bool full);
 
         CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetExecutions(int id, int? limit = null, int? page = null);
@@ -74,7 +85,9 @@ namespace LiquidQuoine.Net.Interfaces
 
         Task<CallResult<LiquidQuoinePlacedOrder>> GetOrderAsync(long orderId);
 
+        CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>> GetOrders(string fundingCurrency=null, int? productId=null, OrderStatus? status=null, bool withDetails=false);
 
+        Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>> GetOrdersAsync(string fundingCurrency = null, int? productId = null, OrderStatus? status = null, bool withDetails = false);
 
         /// <summary>
         /// Ping to see if the server is reachable
