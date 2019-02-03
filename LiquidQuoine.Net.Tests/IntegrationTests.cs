@@ -65,12 +65,19 @@ namespace LuqidExchange.Net.Tests
         [Theory]
         [InlineData("USD")]
         public void Should_Return_InterestRates(string pair)
-        {
-            var t = new LiquidQuoinePlacedOrder() {LeverageLevel = LeverageLevel.Level10 };
-            Console.WriteLine(JsonConvert.SerializeObject(t));
+        {       
             var result = client.GetInterestRates(pair);
             Assert.True(result.Success);
             Assert.True(result.Data!=null);
+        }
+
+        [Theory]
+        [InlineData(-1)]
+        public void Should_Return_Empty_Order(int id)
+        {
+            var result = client.GetOrder(id);
+            Assert.False(result.Success);
+            Assert.Contains("not found", result.Error.Message);
         }
     }
 }

@@ -1,7 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageTags>api.liquid.com crypto exchange wrapper</PackageTags>
+    <RepositoryUrl>https://github.com/ridicoulous/LiquidQuoine.Net</RepositoryUrl>
+    <PackageIconUrl>https://quoine.com/9526335da92fe0cc58822374429063e7.png</PackageIconUrl>
+    <Authors>ridicoulous</Authors>
+    <Company />
+    <Product />
+    <Description>C# api wrapper for Liquid.com by Quoine</Description>
+    <Version>0.0.1</Version>
+    <PackageReleaseNotes>initial release</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

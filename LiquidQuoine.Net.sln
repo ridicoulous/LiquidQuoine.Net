@@ -7,6 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiquidQuoine.Net", "LiquidQ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiquidQuoine.Net.Tests", "LiquidQuoine.Net.Tests\LiquidQuoine.Net.Tests.csproj", "{3E7D7018-04BC-4208-8C53-FC3B6DE5FB49}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7A671DF-77A5-4ED3-8387-C8A3099DAB1A}"
+	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
+		LICENSE.md = LICENSE.md
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -240,11 +240,9 @@ namespace LiquidQuoine.Net
         }
 
         public CallResult<LiquidQuoinePlacedOrder> PlaceMarginOrder(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection = null)
-        {
-            throw new NotImplementedException();
-        }
+                => PlaceMarginOrderAsync(productId, orderSide, orderType, leverageLevel, fundingCurrency, quantity, price, priceRange, orderDirection).Result;
 
-        public async Task<CallResult<LiquidQuoinePlacedOrder>> PlaceMarginOrderAsync(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection=null)
+        public async Task<CallResult<LiquidQuoinePlacedOrder>> PlaceMarginOrderAsync(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection = null)
         {
             var parameters = new Dictionary<string, object>()
             {
@@ -255,9 +253,6 @@ namespace LiquidQuoine.Net
                 { "price", JsonConvert.SerializeObject(price,new StringToDecimalConverter())},
                 { "leverage_level", JsonConvert.SerializeObject(leverageLevel)},
                 { "funding_currency", fundingCurrency},
-             //   { "order_direction", JsonConvert.SerializeObject(leverageLevel)},
-
-
             };
             if (priceRange.HasValue && orderType != OrderType.MarketWithRange)
             {
@@ -271,14 +266,13 @@ namespace LiquidQuoine.Net
 
         }
 
-        public CallResult<LiquidQuoinePlacedOrder> GetOrder(long orderId)
+        public CallResult<LiquidQuoinePlacedOrder> GetOrder(long orderId) => GetOrderAsync(orderId).Result;
+        public async Task<CallResult<LiquidQuoinePlacedOrder>> GetOrderAsync(long orderId)
         {
-            throw new NotImplementedException();
+            var result = await ExecuteRequest<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(GetOrderEndpoint, orderId.ToString())), "GET", null, true).ConfigureAwait(false);
+            return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
         }
 
-        public Task<CallResult<LiquidQuoinePlacedOrder>> GetOrderAsync(long orderId)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

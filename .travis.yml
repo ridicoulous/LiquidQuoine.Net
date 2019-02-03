@@ -1,0 +1,8 @@
+language: csharp
+mono: none
+solution: LiquidQuoine.Net.sln
+dotnet: 2.2.103
+dist: trusty
+script:
+ - dotnet build LiquidQuoine.Net/LiquidQuoine.Net.csproj --framework "netstandard2.0"
+ - dotnet test LiquidQuoine.Net/LiquidQuoine.Net.Tests.csproj
