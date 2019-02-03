@@ -102,7 +102,7 @@ using(var client = new LiquidQuoineClient())
 	if (priceResult.Success)
 		Console.WriteLine($"OrderBook: {orderBookByProductId.Data.BuyPriceLevels[0].Price}");
 	else
-		Console.WriteLine($"Error: {priceResult.Error.Message}");
+		Console.WriteLine($"Error: {orderBookByProductId.Error.Message}");
 }
 ````
 
