@@ -1,7 +1,7 @@
 language: csharp
 mono: none
 solution: LiquidQuoine.Net.sln
-dotnet: 2.2.103
+dotnet: 2.0.0
 dist: trusty
 script:
  - dotnet build LiquidQuoine.Net/LiquidQuoine.Net.csproj --framework "netstandard2.0"
