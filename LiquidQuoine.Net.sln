@@ -10,13 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7A671DF-77A5-4ED3-8387-C8A3099DAB1A}"
 	ProjectSection(SolutionItems) = preProject
 		.travis.yml = .travis.yml
+		Resources\icon.png = Resources\icon.png
 		LICENSE.md = LICENSE.md
 		README.md = README.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{E0CD7C48-1C52-4AD8-8EFB-C421A06EC63F}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\Pictures\icon.png = ..\..\..\..\Pictures\icon.png
 	EndProjectSection
 EndProject
 Global
