@@ -5,4 +5,4 @@ dotnet: 2.0.0
 dist: trusty
 script:
  - dotnet build LiquidQuoine.Net/LiquidQuoine.Net.csproj --framework "netstandard2.0"
- - dotnet test LiquidQuoine.Net/LiquidQuoine.Net.Tests.csproj
+ - dotnet test LiquidQuoine.Net.Tests/LiquidQuoine.Net.Tests.csproj
