@@ -17,15 +17,38 @@ namespace LiquidQuoine.Net
 {
     public class LiquidQuoineClient : RestClient, ILiquidQuoineClient
     {
-        #region Endpoint
+        #region Endpoints consts
         private const string GetAllProductsEndpoint = "products";
         private const string GetProductEndpoint = "products/{}";
         private const string GetOrderBookEndpoint = "products/{}/price_levels";
         private const string GetExecutionsEndpoint = "executions";
         private const string GetInterestRatesEndpoint = "ir_ladders/{}";
-        private const string GetAllAccountsBalancesEndpoint = "accounts/balance";
         private const string PlaceOrderEndpoint = "orders";
         private const string GetOrderEndpoint = "orders/{}";
+        private const string GetOrdersEndpoint = "orders";
+        private const string CancelOrderEndpoint = "orders/{}/cancel";
+        private const string EditOrderEndpoint = "orders/{}";
+        private const string GetOrderTradesEndpoint = "orders/{}/trades";
+        private const string GetOrderExecutionsEndpoint = "orders/{}/executions";
+        private const string GetMyExecutionsEndpoint = "executions/me";
+        private const string GetFiatAccountsEndpoint = "fiat_accounts";
+        private const string CreateFiatAccountEndpoint = "fiat_accounts";
+        private const string GetCryptoAccountsEndpoint = "crypto_accounts";
+        private const string GetAllAccountsBalancesEndpoint = "accounts/balance";
+        private const string GetMainAssetEndpoint = "accounts/main_asset";
+        private const string CreateLoanBidEndpoint = "loan_bids";
+        private const string GetLoanBidsEndpoint = "loan_bids/{}";
+        private const string CloseLoanBidEndpoint = "loan_bids/{}/close";
+        private const string GetLoansEndpoint = "loans";
+        private const string UpdateLoanEndpoint = "loans/{}";
+        private const string GetTradingAccountsEndpoint = "trading_accounts";
+        private const string GetTradingAccountEndpoint = "trading_accounts/{}";
+        private const string UpdateAccountLeveregaLevelEndpoint = "trading_accounts/{}";
+        private const string GetTradesEndpoint = "trades";
+        private const string CloseTradeEndpoint = "trades/{}/close";
+        private const string CloseAllTradesEndpoint = "trades/close_all";
+        private const string UpdateTradeEndpoint = "trades/{}";
+        private const string GetTradeLoansEndpoint = "trades/{}/loans";
         #endregion
         #region constructor/destructor
         private static LiquidQuoineClientOptions defaultOptions = new LiquidQuoineClientOptions();
@@ -118,16 +141,7 @@ namespace LiquidQuoine.Net
         #endregion
 
         #region implementation
-        /// <summary>
-        /// Get all Account Balances
-        /// </summary>
-        /// <returns></returns>
-        public CallResult<List<LiquidQouineAccountBalance>> GetAccountsBalances() => GetAccountsBalancesAsync().Result;
-        public async Task<CallResult<List<LiquidQouineAccountBalance>>> GetAccountsBalancesAsync()
-        {
-            var result = await ExecuteRequest<List<LiquidQouineAccountBalance>>(GetUrl(GetAllAccountsBalancesEndpoint), "GET", null, true).ConfigureAwait(false);
-            return new CallResult<List<LiquidQouineAccountBalance>>(result.Data, result.Error);
-        }
+       
         /// <summary>
         /// Get the list of all available products.
         /// </summary>
@@ -290,14 +304,14 @@ namespace LiquidQuoine.Net
         /// <summary>
         /// Use it to place margin order
         /// </summary>
-        /// <param name="productId"></param>
-        /// <param name="orderSide"></param>
-        /// <param name="orderType"></param>
+        /// <param name="productId">product id</param>
+        /// <param name="orderSide">order side</param>
+        /// <param name="orderType">order type</param>
         /// <param name="leverageLevel">Valid levels: 2,4,5,10,25</param>
         /// <param name="fundingCurrency">Currency used to fund the trade with. Default is quoted currency (e.g a trade in BTCUSD product will use USD as the funding currency as default)</param>
         /// <param name="quantity"></param>
         /// <param name="price"></param>
-        /// <param name="priceRange"></param>
+        /// <param name="priceRange">use it to place TrailingStop order</param>
         /// <param name="orderDirection">one_direction, two_direction or netout.</param>
         /// <returns></returns>
         public CallResult<LiquidQuoinePlacedOrder> PlaceMarginOrder(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection = null)
@@ -305,14 +319,14 @@ namespace LiquidQuoine.Net
         /// <summary>
         /// Use it to place margin order
         /// </summary>
-        /// <param name="productId"></param>
-        /// <param name="orderSide"></param>
-        /// <param name="orderType"></param>
+        /// <param name="productId">product id</param>
+        /// <param name="orderSide">order side</param>
+        /// <param name="orderType">order type</param>
         /// <param name="leverageLevel">Valid levels: 2,4,5,10,25</param>
         /// <param name="fundingCurrency">Currency used to fund the trade with. Default is quoted currency (e.g a trade in BTCUSD product will use USD as the funding currency as default)</param>
         /// <param name="quantity"></param>
         /// <param name="price"></param>
-        /// <param name="priceRange"></param>
+        /// <param name="priceRange">use it to place TrailingStop order</param>
         /// <param name="orderDirection">one_direction, two_direction or netout.</param>
         /// <returns></returns>
         public async Task<CallResult<LiquidQuoinePlacedOrder>> PlaceMarginOrderAsync(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection = null)
@@ -351,6 +365,119 @@ namespace LiquidQuoine.Net
         {
             var result = await ExecuteRequest<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(GetOrderEndpoint, orderId.ToString())), "GET", null, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
+        }
+        /// <summary>
+        /// Cancel order
+        /// </summary>
+        /// <param name="orderId">Order id</param>
+        /// <returns></returns>
+        public CallResult<LiquidQuoinePlacedOrder> CancelOrder(long orderId) => CancelOrderAsync(orderId).Result;
+        /// <summary>
+        /// Cancel order
+        /// </summary>
+        /// <param name="orderId">Order id</param>
+        /// <returns></returns>
+        public async Task<CallResult<LiquidQuoinePlacedOrder>> CancelOrderAsync(long orderId)
+        {
+            var result = await ExecuteRequest<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(CancelOrderEndpoint, orderId.ToString())), "PUT", null, true).ConfigureAwait(false);
+            return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
+        }
+        /// <summary>
+        /// Edit placed order
+        /// </summary>
+        /// <param name="orderId">order id</param>
+        /// <param name="quantity">new order quantity</param>
+        /// <param name="price">new order price</param>        
+        /// <returns></returns>
+        public CallResult<LiquidQuoinePlacedOrder> EditOrder(long orderId, decimal quantity, decimal price) => EditOrderAsync(orderId, quantity, price).Result;
+        /// <summary>
+        /// Edit placed order
+        /// </summary>
+        /// <param name="orderId">order id</param>
+        /// <param name="quantity">new order quantity</param>
+        /// <param name="price">new order price</param>        
+        /// <returns></returns>
+        public async Task<CallResult<LiquidQuoinePlacedOrder>> EditOrderAsync(long orderId, decimal quantity, decimal price)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.Add("quantity", JsonConvert.SerializeObject(quantity, new StringToDecimalConverter()));
+            parameters.Add("price", JsonConvert.SerializeObject(price,new StringToDecimalConverter()));
+
+            var result = await ExecuteRequest<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(EditOrderEndpoint, orderId.ToString())), "PUT", parameters, true).ConfigureAwait(false);
+            return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
+        }
+        /// <summary>
+        /// Get an order's trades
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        public CallResult<List<LiquidQuoineOrderTrade>> GetOrderTrades(long orderId) => GetOrderTradesAsync(orderId).Result;
+        /// <summary>
+        /// Get an order's trades
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        public async Task<CallResult<List<LiquidQuoineOrderTrade>>> GetOrderTradesAsync(long orderId)
+        {
+            var result = await ExecuteRequest<List<LiquidQuoineOrderTrade>>(GetUrl(FillPathParameter(GetOrderTradesEndpoint, orderId.ToString())), "GET", null, true).ConfigureAwait(false);
+            return new CallResult<List<LiquidQuoineOrderTrade>>(result.Data, result.Error);
+        }
+        /// <summary>
+        /// Get an Order’s Executions
+        /// </summary>
+        /// <param name="orderId">Order ID</param>
+        /// <param name="limit">Limit executions per request</param>
+        /// <param name="page">Page number of results</param>
+        /// <returns></returns>
+        public CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetOrderExecutions(long orderId, int? limit, int? page) => GetOrderExecutionsAsync(orderId, limit, page).Result;
+        /// <summary>
+        /// Get an Order’s Executions
+        /// </summary>
+        /// <param name="orderId">Order ID</param>
+        /// <param name="limit">Limit executions per request</param>
+        /// <param name="page">Page number of results</param>
+        /// <returns></returns>
+        public async Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetOrderExecutionsAsync(long orderId, int? limit, int? page)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.Add("limit", limit);
+            parameters.Add("page", page);
+            var result = await ExecuteRequest<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(GetUrl(FillPathParameter(GetOrderExecutionsEndpoint, orderId.ToString())), "GET", parameters, true).ConfigureAwait(false);
+            return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(result.Data, result.Error);
+        }
+        /// <summary>
+        /// Get Your Executions by product id
+        /// </summary>
+        /// <param name="productId">Product id</param>   
+        /// <returns></returns>
+        public CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetMyExecutions(int productId) => GetMyExecutionsAsync(productId).Result;
+        /// <summary>
+        /// Get Your Executions by product id
+        /// </summary>
+        /// <param name="productId">Product id</param>   
+        /// <returns></returns>
+        public async Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetMyExecutionsAsync(int productId)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.Add("product_id", productId);
+            var result = await ExecuteRequest<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(GetUrl(GetMyExecutionsEndpoint), "GET", parameters, true).ConfigureAwait(false);
+            return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(result.Data, result.Error);
+        }
+
+
+        /// <summary>
+        /// Get all Account Balances
+        /// </summary>
+        /// <returns></returns>
+        public CallResult<List<LiquidQouineAccountBalance>> GetAccountsBalances() => GetAccountsBalancesAsync().Result;
+        /// <summary>
+        /// Get all Account Balances
+        /// </summary>
+        /// <returns></returns>
+        public async Task<CallResult<List<LiquidQouineAccountBalance>>> GetAccountsBalancesAsync()
+        {
+            var result = await ExecuteRequest<List<LiquidQouineAccountBalance>>(GetUrl(GetAllAccountsBalancesEndpoint), "GET", null, true).ConfigureAwait(false);
+            return new CallResult<List<LiquidQouineAccountBalance>>(result.Data, result.Error);
         }
         #endregion
 

@@ -173,6 +173,78 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="orderId">order id</param>
         /// <returns></returns>
         Task<CallResult<LiquidQuoinePlacedOrder>> GetOrderAsync(long orderId);
+        /// <summary>
+        /// Cancel placed order
+        /// </summary>
+        /// <param name="orderId">order id</param>
+        /// <returns></returns>
+        CallResult<LiquidQuoinePlacedOrder> CancelOrder(long orderId);
+        /// <summary>
+        /// Cancel placed order
+        /// </summary>
+        /// <param name="orderId">order id</param>
+        /// <returns></returns>
+        Task<CallResult<LiquidQuoinePlacedOrder>> CancelOrderAsync(long orderId);
+        /// <summary>
+        /// Edit placed order
+        /// </summary>
+        /// <param name="orderId">order id</param>
+        /// <param name="quantity">new order quantity</param>
+        /// <param name="price">new order price</param>        
+        /// <returns></returns>
+        CallResult<LiquidQuoinePlacedOrder> EditOrder(long orderId,decimal quantity, decimal price);
+        /// <summary>
+        /// Edit placed order
+        /// </summary>
+        /// <param name="orderId">order id</param>
+        /// <param name="quantity">new order quantity</param>
+        /// <param name="price">new order price</param>        
+        /// <returns></returns>
+        Task<CallResult<LiquidQuoinePlacedOrder>> EditOrderAsync(long orderId, decimal quantity, decimal price);
+        /// <summary>
+        /// Get an order's trades
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        CallResult<List<LiquidQuoineOrderTrade>> GetOrderTrades(long orderId);
+        /// <summary>
+        /// Get an order's trades
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        Task<CallResult<List<LiquidQuoineOrderTrade>>> GetOrderTradesAsync(long orderId);
+        /// <summary>
+        /// Get an Order’s Executions
+        /// </summary>
+        /// <param name="orderId">Order ID</param>
+        /// <param name="limit">Limit executions per request</param>
+        /// <param name="page">Page number of results</param>
+        /// <returns></returns>
+        CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetOrderExecutions(long orderId, int? limit, int? page);
+        /// <summary>
+        /// Get an Order’s Executions
+        /// </summary>
+        /// <param name="orderId">Order ID</param>
+        /// <param name="limit">Limit executions per request</param>
+        /// <param name="page">Page number of results</param>
+        /// <returns></returns>
+        Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetOrderExecutionsAsync(long orderId, int? limit, int? page);
+        /// <summary>
+        /// Get Your Executions by product id
+        /// </summary>
+        /// <param name="productId">Product id</param>   
+        /// <returns></returns>
+        CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetMyExecutions(int productId);
+        /// <summary>
+        /// Get Your Executions by product id
+        /// </summary>
+        /// <param name="productId">Product id</param>   
+        /// <returns></returns>
+        Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetMyExecutionsAsync(int productId);
+
+
+
+
 
         /// <summary>
         /// Ping to see if the server is reachable

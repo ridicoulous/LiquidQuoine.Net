@@ -33,4 +33,19 @@
         Level10=10,
         Level25=25
     }
+    public enum MaringOrderSide
+    {
+        Long,
+        Short
+    }
+    public enum MaringOrderStatus
+    {
+        Opened,
+        Closed
+    }
+
+    public enum CurrencyTypes
+    {
+        Crypto, Fiat
+    }
 }
