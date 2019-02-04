@@ -7,7 +7,7 @@ namespace LiquidQuoine.Net
     {
         public LiquidQuoineClientOptions()
         {
-            BaseAddress = "https://api.liquid.com";
+            BaseAddress = "https://api.liquid.com";            
         }
     }
 }

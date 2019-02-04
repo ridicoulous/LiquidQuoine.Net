@@ -9,7 +9,10 @@ namespace LuqidExchange.Net.Tests
 {
     public class AccountTests
     {
-        LiquidQuoineClient client = new LiquidQuoineClient(new LiquidQuoineClientOptions() { ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("786233", "YNDLdz8Se2XOJixAm8TcYSdOuzqs+JDxu+JZVr5NNZBeWkr/D174smXvzuNnZfIhhwFxotPm+vLux5LndV4wuw==") });
+        LiquidQuoineClient client = new LiquidQuoineClient(new LiquidQuoineClientOptions()
+        {
+            ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("786233", "YNDLdz8Se2XOJixAm8TcYSdOuzqs+JDxu+JZVr5NNZBeWkr/D174smXvzuNnZfIhhwFxotPm+vLux5LndV4wuw==")
+        });
 
         [Fact]
         public void Should_Return_Balances_List()
