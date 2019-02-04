@@ -7,9 +7,6 @@ LiquidQuoine.Net is a .Net wrapper for the liquid.com (by Quoine) API as describ
 * Placing and managing orders
 * Reading accounts, balances and funds
 
-Additionally it adds some convenience features like:
-* Configurable rate limiting
-* Autmatic logging
 
 **If you think something is broken, something is missing or have any questions, please open an [Issue](https://github.com/ridicoulous/LiquidQuoine.Net/issues)**
 
