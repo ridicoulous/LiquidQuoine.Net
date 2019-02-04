@@ -112,6 +112,7 @@ The default behavior of the clients can be changed by providing options to the c
 
 
 ## Release notes
-
+* Version 0.0.2 - 04 feb 2019
+	* Orders implemented
 * Version 0.0.1 - 03 feb 2019
 	* Initial release
