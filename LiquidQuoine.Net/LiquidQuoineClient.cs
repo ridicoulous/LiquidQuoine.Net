@@ -65,6 +65,7 @@ namespace LiquidQuoine.Net
         /// </summary>
         public LiquidQuoineClient(LiquidQuoineClientOptions options) : base(options, options.ApiCredentials == null ? null : new LiquidQuoineAuthenticationProvider(options.ApiCredentials))
         {
+            log.Level = CryptoExchange.Net.Logging.LogVerbosity.Debug;
         }
         /// <summary>
         /// Sets the default options to use for new clients
@@ -131,7 +132,7 @@ namespace LiquidQuoine.Net
             if (error["errors"] == null)
                 return new ServerError(error.ToString());
 
-            return new ServerError($"{(string)error["errors"]}");
+            return new ServerError($"{error["errors"]}");
         }
 
         protected Uri GetUrl(string endpoint, string version = null)
@@ -141,7 +142,7 @@ namespace LiquidQuoine.Net
         #endregion
 
         #region implementation
-       
+
         /// <summary>
         /// Get the list of all available products.
         /// </summary>
@@ -273,7 +274,8 @@ namespace LiquidQuoine.Net
         /// <param name="price">price per unit of cryptocurrency</param>
         /// <param name="priceRange">For order_type of market_with_range only, slippage of the order. Use for TrailingStops</param>
         /// <returns></returns>
-        public CallResult<LiquidQuoinePlacedOrder> PlaceOrder(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal price, decimal? priceRange = null) => PlaceOrderAsync(productId, orderSide, orderType, quantity, price, priceRange).Result;
+        public CallResult<LiquidQuoinePlacedOrder> PlaceOrder(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal? price = null, decimal? priceRange = null)
+            => PlaceOrderAsync(productId, orderSide, orderType, quantity, price, priceRange).Result;
         /// <summary>
         /// Create an Order
         /// </summary>
@@ -284,21 +286,26 @@ namespace LiquidQuoine.Net
         /// <param name="price">price per unit of cryptocurrency</param>
         /// <param name="priceRange">For order_type of market_with_range only, slippage of the order. Use for TrailingStops</param>
         /// <returns></returns>
-        public async Task<CallResult<LiquidQuoinePlacedOrder>> PlaceOrderAsync(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal price, decimal? priceRange = null)
+        public async Task<CallResult<LiquidQuoinePlacedOrder>> PlaceOrderAsync(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal? price = null, decimal? priceRange = null)
         {
             var parameters = new Dictionary<string, object>()
             {
                 { "order_type", JsonConvert.SerializeObject(orderType,new OrderTypeConverter())},
                 { "product_id", productId},
-                { "side", JsonConvert.SerializeObject(orderSide,new OrderSideConverter())},
-                { "quantity", JsonConvert.SerializeObject(quantity,new StringToDecimalConverter())},
-                { "price", JsonConvert.SerializeObject(price,new StringToDecimalConverter())}
+                { "side",  JsonConvert.SerializeObject(orderSide,new OrderSideConverter())},
+                { "quantity",quantity}
             };
+
+            if (price.HasValue && orderType == OrderType.Market)
+                return new CallResult<LiquidQuoinePlacedOrder>(null, new ServerError("price parameter must be used for order type != OrderType.Market"));
             if (priceRange.HasValue && orderType != OrderType.MarketWithRange)
                 return new CallResult<LiquidQuoinePlacedOrder>(null, new ServerError("priceRange parameter can be used only for OrderType.MarketWithRange only, slippage of the order"));
 
-            parameters.AddOptionalParameter("price_range", JsonConvert.SerializeObject(priceRange, new StringToDecimalConverter()));
-            var result = await ExecuteRequest<LiquidQuoinePlacedOrder>(GetUrl(PlaceOrderEndpoint), "POST", parameters, true).ConfigureAwait(false);
+            parameters.AddOptionalParameter("price", price);
+            parameters.AddOptionalParameter("price_range", priceRange);
+            var order = new Dictionary<string, object>() { { "order", parameters } };
+            var test = JsonConvert.SerializeObject(order);
+            var result = await ExecuteRequest<LiquidQuoinePlacedOrder>(GetUrl(PlaceOrderEndpoint), "POST", order, true, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
         }
         /// <summary>
@@ -336,17 +343,18 @@ namespace LiquidQuoine.Net
                 { "order_type", JsonConvert.SerializeObject(orderType,new OrderTypeConverter())},
                 { "product_id", productId},
                 { "side", JsonConvert.SerializeObject(orderSide,new OrderSideConverter())},
-                { "quantity", JsonConvert.SerializeObject(quantity,new StringToDecimalConverter())},
-                { "price", JsonConvert.SerializeObject(price,new StringToDecimalConverter())},
+                { "quantity",quantity},
+                { "price", price},
                 { "leverage_level", JsonConvert.SerializeObject(leverageLevel)},
                 { "funding_currency", fundingCurrency},
             };
             if (priceRange.HasValue && orderType != OrderType.MarketWithRange)
                 return new CallResult<LiquidQuoinePlacedOrder>(null, new ServerError("priceRange parameter can be used only for OrderType.MarketWithRange only, slippage of the order"));
-            parameters.AddOptionalParameter("price_range", JsonConvert.SerializeObject(priceRange, new StringToDecimalConverter()));
-            parameters.AddOptionalParameter("order_direction", JsonConvert.SerializeObject(orderDirection, new StringToDecimalConverter()));
+            parameters.AddOptionalParameter("price_range", priceRange);
+            parameters.AddOptionalParameter("order_direction", orderDirection);
+            var order = new Dictionary<string, object>() { { "order", parameters } };
 
-            var result = await ExecuteRequest<LiquidQuoinePlacedOrder>(GetUrl(PlaceOrderEndpoint), "POST", parameters, true).ConfigureAwait(false);
+            var result = await ExecuteRequest<LiquidQuoinePlacedOrder>(GetUrl(PlaceOrderEndpoint), "POST", order, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
 
         }
@@ -400,8 +408,8 @@ namespace LiquidQuoine.Net
         public async Task<CallResult<LiquidQuoinePlacedOrder>> EditOrderAsync(long orderId, decimal quantity, decimal price)
         {
             var parameters = new Dictionary<string, object>();
-            parameters.Add("quantity", JsonConvert.SerializeObject(quantity, new StringToDecimalConverter()));
-            parameters.Add("price", JsonConvert.SerializeObject(price,new StringToDecimalConverter()));
+            parameters.Add("quantity", quantity);
+            parameters.Add("price", price);
 
             var result = await ExecuteRequest<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(EditOrderEndpoint, orderId.ToString())), "PUT", parameters, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
@@ -487,13 +495,13 @@ namespace LiquidQuoine.Net
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("funding_currency", fundingCurrency);
             parameters.AddOptionalParameter("product_id", productId);
-            parameters.AddOptionalParameter("status", JsonConvert.SerializeObject(status,new OrderStatusConverter()));
+            parameters.AddOptionalParameter("status", JsonConvert.SerializeObject(status, new OrderStatusConverter()));
             if (withDetails)
                 parameters.AddParameter("with_details", 1);
             var result = await ExecuteRequest<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>(GetUrl(GetOrdersEndpoint), "GET", parameters, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>(result.Data, result.Error);
         }
 
- 
+
     }
 }

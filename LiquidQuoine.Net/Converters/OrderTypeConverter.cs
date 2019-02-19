@@ -8,7 +8,7 @@ namespace LiquidQuoine.Net.Converters
 {
     public class OrderTypeConverter : BaseConverter<OrderType>
     {
-        public OrderTypeConverter() : this(true) { }
+        public OrderTypeConverter() : this(false) { }
         public OrderTypeConverter(bool quotes) : base(quotes) { }
 
         protected override Dictionary<OrderType, string> Mapping => new Dictionary<OrderType, string>

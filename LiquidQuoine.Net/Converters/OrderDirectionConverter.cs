@@ -6,7 +6,7 @@ namespace LiquidQuoine.Net.Converters
 {
     public class OrderDirectionConverter : BaseConverter<OrderDirection>
     {
-        public OrderDirectionConverter() : this(true) { }
+        public OrderDirectionConverter() : this(false) { }
         public OrderDirectionConverter(bool quotes) : base(quotes) { }
         protected override Dictionary<OrderDirection, string> Mapping => new Dictionary<OrderDirection, string>
         {

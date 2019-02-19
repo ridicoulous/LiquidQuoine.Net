@@ -6,7 +6,7 @@ namespace LiquidQuoine.Net.Converters
 {
     public class MarginOrderStatusConverter : BaseConverter<MaringOrderStatus>
     {
-        public MarginOrderStatusConverter() : this(true) { }
+        public MarginOrderStatusConverter() : this(false) { }
         public MarginOrderStatusConverter(bool quotes) : base(quotes) { }
         protected override Dictionary<MaringOrderStatus, string> Mapping => new Dictionary<MaringOrderStatus, string>
         {

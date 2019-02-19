@@ -38,7 +38,7 @@ namespace LiquidQuoine.Net.Converters
         {
             if (value != null)
             {
-                var text = value.ToString();
+                var text = value.ToString().Replace(",",".");
                 writer.WriteValue(text);
             }
 

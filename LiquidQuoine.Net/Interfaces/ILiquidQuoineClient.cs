@@ -122,7 +122,7 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="price">price per unit of cryptocurrency</param>
         /// <param name="priceRange">For order_type of market_with_range only, slippage of the order. Use for TrailingStops</param>
         /// <returns></returns>
-        CallResult<LiquidQuoinePlacedOrder> PlaceOrder(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal price, decimal? priceRange = null);
+        CallResult<LiquidQuoinePlacedOrder> PlaceOrder(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal? price = null, decimal? priceRange = null);
         /// <summary>
         /// Create an Order
         /// </summary>
@@ -133,7 +133,7 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="price">price per unit of cryptocurrency</param>
         /// <param name="priceRange">For order_type of market_with_range only, slippage of the order. Use for TrailingStops</param>
         /// <returns></returns>
-        Task<CallResult<LiquidQuoinePlacedOrder>> PlaceOrderAsync(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal price, decimal? priceRange=null);
+        Task<CallResult<LiquidQuoinePlacedOrder>> PlaceOrderAsync(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal? price = null, decimal? priceRange=null);
         /// <summary>
         /// Use it to place margin order
         /// </summary>

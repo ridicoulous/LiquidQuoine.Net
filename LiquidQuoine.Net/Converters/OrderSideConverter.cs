@@ -8,7 +8,7 @@ namespace LiquidQuoine.Net.Converters
 {
     public class OrderSideConverter : BaseConverter<OrderSide>
     {
-        public OrderSideConverter() : this(true) { }
+        public OrderSideConverter() : this(false) { }
         public OrderSideConverter(bool quotes) : base(quotes) { }
 
         protected override Dictionary<OrderSide, string> Mapping => new Dictionary<OrderSide, string>

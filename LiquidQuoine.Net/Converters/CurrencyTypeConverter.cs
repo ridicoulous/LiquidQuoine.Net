@@ -6,7 +6,7 @@ namespace LiquidQuoine.Net.Converters
 {
     public class CurrencyTypeConverter : BaseConverter<CurrencyTypes>
     {
-        public CurrencyTypeConverter() : this(true) { }
+        public CurrencyTypeConverter() : this(false) { }
         public CurrencyTypeConverter(bool quotes) : base(quotes) { }
         protected override Dictionary<CurrencyTypes, string> Mapping => new Dictionary<CurrencyTypes, string>
         {
