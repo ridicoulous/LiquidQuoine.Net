@@ -214,22 +214,23 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="orderId"></param>
         /// <returns></returns>
         Task<CallResult<List<LiquidQuoineOrderTrade>>> GetOrderTradesAsync(long orderId);
-        /// <summary>
-        /// Get an Order’s Executions
-        /// </summary>
-        /// <param name="orderId">Order ID</param>
-        /// <param name="limit">Limit executions per request</param>
-        /// <param name="page">Page number of results</param>
-        /// <returns></returns>
-        CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetOrderExecutions(long orderId, int? limit, int? page);
-        /// <summary>
-        /// Get an Order’s Executions
-        /// </summary>
-        /// <param name="orderId">Order ID</param>
-        /// <param name="limit">Limit executions per request</param>
-        /// <param name="page">Page number of results</param>
-        /// <returns></returns>
-        Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetOrderExecutionsAsync(long orderId, int? limit, int? page);
+//looks like it is removed from documentation
+        ///// <summary>
+        ///// Get an Order’s Executions
+        ///// </summary>
+        ///// <param name="orderId">Order ID</param>
+        ///// <param name="limit">Limit executions per request</param>
+        ///// <param name="page">Page number of results</param>
+        ///// <returns></returns>
+        //CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetOrderExecutions(long orderId, int? limit = null, int? page = null);
+        ///// <summary>
+        ///// Get an Order’s Executions
+        ///// </summary>
+        ///// <param name="orderId">Order ID</param>
+        ///// <param name="limit">Limit executions per request</param>
+        ///// <param name="page">Page number of results</param>
+        ///// <returns></returns>
+        //Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetOrderExecutionsAsync(long orderId, int? limit=null, int? page = null);
         /// <summary>
         /// Get Your Executions by product id
         /// </summary>

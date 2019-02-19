@@ -430,29 +430,29 @@ namespace LiquidQuoine.Net
             var result = await ExecuteRequest<List<LiquidQuoineOrderTrade>>(GetUrl(FillPathParameter(GetOrderTradesEndpoint, orderId.ToString())), "GET", null, true).ConfigureAwait(false);
             return new CallResult<List<LiquidQuoineOrderTrade>>(result.Data, result.Error);
         }
-        /// <summary>
-        /// Get an Order’s Executions
-        /// </summary>
-        /// <param name="orderId">Order ID</param>
-        /// <param name="limit">Limit executions per request</param>
-        /// <param name="page">Page number of results</param>
-        /// <returns></returns>
-        public CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetOrderExecutions(long orderId, int? limit, int? page) => GetOrderExecutionsAsync(orderId, limit, page).Result;
-        /// <summary>
-        /// Get an Order’s Executions
-        /// </summary>
-        /// <param name="orderId">Order ID</param>
-        /// <param name="limit">Limit executions per request</param>
-        /// <param name="page">Page number of results</param>
-        /// <returns></returns>
-        public async Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetOrderExecutionsAsync(long orderId, int? limit, int? page)
-        {
-            var parameters = new Dictionary<string, object>();
-            parameters.Add("limit", limit);
-            parameters.Add("page", page);
-            var result = await ExecuteRequest<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(GetUrl(FillPathParameter(GetOrderExecutionsEndpoint, orderId.ToString())), "GET", parameters, true).ConfigureAwait(false);
-            return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(result.Data, result.Error);
-        }
+        ///// <summary>
+        ///// Get an Order’s Executions
+        ///// </summary>
+        ///// <param name="orderId">Order ID</param>
+        ///// <param name="limit">Limit executions per request</param>
+        ///// <param name="page">Page number of results</param>
+        ///// <returns></returns>
+        //public CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetOrderExecutions(long orderId, int? limit=null, int? page=null) => GetOrderExecutionsAsync(orderId, limit, page).Result;
+        ///// <summary>
+        ///// Get an Order’s Executions
+        ///// </summary>
+        ///// <param name="orderId">Order ID</param>
+        ///// <param name="limit">Limit executions per request</param>
+        ///// <param name="page">Page number of results</param>
+        ///// <returns></returns>
+        //public async Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetOrderExecutionsAsync(long orderId, int? limit=null, int? page=null)
+        //{
+        //    var parameters = new Dictionary<string, object>();
+        //    parameters.AddOptionalParameter("limit", limit);
+        //    parameters.AddOptionalParameter("page", page);
+        //    var result = await ExecuteRequest<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(GetUrl(FillPathParameter(GetOrderExecutionsEndpoint, orderId.ToString())), "GET", parameters, true).ConfigureAwait(false);
+        //    return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(result.Data, result.Error);
+        //}
         /// <summary>
         /// Get Your Executions by product id
         /// </summary>

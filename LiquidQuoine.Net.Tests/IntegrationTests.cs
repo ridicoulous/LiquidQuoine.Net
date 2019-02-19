@@ -11,10 +11,18 @@ namespace LuqidExchange.Net.Tests
     {
         LiquidQuoineClient client = new LiquidQuoineClient(new LiquidQuoineClientOptions()
         {
-          //  ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", "")
+            ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("816685", "TONiE8xV1G2p4/UNVrhamIzTiNvrmZSLtL+dIJ1+CrZKBKIaOmuJIG1JrjpXGxkNc0Xl3n1MZsoxQqnJVs0pKA==")
         });
 
-       
+        [Fact]
+        public void Should_Buy_10_Qash_By_Eth()
+        {
+            var my = client.GetMyExecutions(51);
+            //var result2 = client.PlaceOrder(51, OrderSide.Sell, OrderType., 10.00m);
+
+            Assert.True(my.Success);
+            
+        }
         [Fact]
         public void Should_Return_All_Products()
         {
