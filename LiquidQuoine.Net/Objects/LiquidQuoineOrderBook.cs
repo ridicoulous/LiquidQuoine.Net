@@ -7,9 +7,14 @@ namespace LiquidQuoine.Net.Objects
 {
     public partial class LiquidQuoineOrderBook
     {
+        /// <summary>
+        /// Asks
+        /// </summary>
         [JsonProperty("buy_price_levels")]
         public List<LiquidQuoineOrderBookEntry> BuyPriceLevels { get; set; }
-
+        /// <summary>
+        /// Bids
+        /// </summary>
         [JsonProperty("sell_price_levels")]
         public List<LiquidQuoineOrderBookEntry> SellPriceLevels { get; set; }
     }

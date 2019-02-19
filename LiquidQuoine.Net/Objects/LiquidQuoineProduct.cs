@@ -7,7 +7,7 @@ namespace LiquidQuoine.Net.Objects
     public partial class LiquidQuoineProduct
     {
         [JsonProperty("id")]
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         [JsonProperty("product_type")]
         public string ProductType { get; set; }

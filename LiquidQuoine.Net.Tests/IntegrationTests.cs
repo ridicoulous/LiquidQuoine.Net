@@ -11,7 +11,7 @@ namespace LuqidExchange.Net.Tests
     {
         LiquidQuoineClient client = new LiquidQuoineClient(new LiquidQuoineClientOptions()
         {
-            ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("786233", "YNDLdz8Se2XOJixAm8TcYSdOuzqs+JDxu+JZVr5NNZBeWkr/D174smXvzuNnZfIhhwFxotPm+vLux5LndV4wuw==")
+            ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", "")
         });
 
         [Fact]
@@ -43,7 +43,7 @@ namespace LuqidExchange.Net.Tests
         [InlineData(1)]
         public void Should_Return_OrderBook(int id)
         {
-            var result = client.GetOrderBook(id);
+            var result = client.GetOrderBook(id,true);
             Assert.True(result.Success);
             Assert.True(result.Data != null);
             Assert.True(result.Data.SellPriceLevels.Any()||result.Data.BuyPriceLevels.Any());
