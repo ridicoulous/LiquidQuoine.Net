@@ -11,16 +11,16 @@ namespace LuqidExchange.Net.Tests
     {
         LiquidQuoineClient client = new LiquidQuoineClient(new LiquidQuoineClientOptions()
         {
-            ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", "")
+           // ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", "")
         });
 
-        [Fact]
-        public void Should_Return_Balances_List()
-        {
-            var result = client.GetAccountsBalances();
-            Assert.True(result.Success);
-            Assert.True(result.Data.Any());
-        }
+        //[Fact]
+        //public void Should_Return_Balances_List()
+        //{
+        //    var result = client.GetAccountsBalances();
+        //    Assert.True(result.Success);
+        //    Assert.True(result.Data.Any());
+        //}
         [Fact]
         public void Should_Return_All_Products()
         {
@@ -74,13 +74,13 @@ namespace LuqidExchange.Net.Tests
             Assert.True(result.Data!=null);
         }
 
-        [Theory]
-        [InlineData(-1)]
-        public void Should_Return_Empty_Order(int id)
-        {
-            var result = client.GetOrder(id);
-            Assert.False(result.Success);
-            Assert.Contains("not found", result.Error.Message);
-        }
+        //[Theory]
+        //[InlineData(-1)]
+        //public void Should_Return_Empty_Order(int id)
+        //{
+        //    var result = client.GetOrder(id);
+        //    Assert.False(result.Success);
+        //    Assert.Contains("not found", result.Error.Message);
+        //}
     }
 }

@@ -154,7 +154,7 @@ namespace LiquidQuoine.Net
         /// <returns></returns>
         public async Task<CallResult<List<LiquidQuoineProduct>>> GetAllProductsAsync()
         {
-            var result = await ExecuteRequest<List<LiquidQuoineProduct>>(GetUrl(GetAllProductsEndpoint), "GET", null, true).ConfigureAwait(false);
+            var result = await ExecuteRequest<List<LiquidQuoineProduct>>(GetUrl(GetAllProductsEndpoint), "GET", null, false).ConfigureAwait(false);
             return new CallResult<List<LiquidQuoineProduct>>(result.Data, result.Error);
         }
         /// <summary>
