@@ -1,5 +1,6 @@
 using LiquidQuoine.Net;
 using LiquidQuoine.Net.Objects;
+using LiquidQuoine.Net.Objects.Socket;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -13,16 +14,20 @@ namespace LuqidExchange.Net.Tests
         {
             //ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", "")
         });
+        LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions()
+        {
+            //ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", "")
+        });
+        [Fact]
+        public void Should_Buy_Connect_To_Listen_BTCJPY_buy_levels()
+        {
+            _socketclient.SubscribeToOrderBookUpdates("QASHETH",OrderSide.Sell, (book,side) => Console.WriteLine(side+":\n"+JsonConvert.SerializeObject(book)));
 
-        //[Fact]
-        //public void Should_Buy_10_Qash_By_Eth()
-        //{
-        //    var my = client.GetMyExecutions(51);
-        //    //var result2 = client.PlaceOrder(51, OrderSide.Sell, OrderType., 10.00m);
+            Assert.True(1==1);
+            Assert.True(1 == 1);
 
-        //    Assert.True(my.Success);
-            
-        //}
+
+        }
         [Fact]
         public void Should_Return_All_Products()
         {

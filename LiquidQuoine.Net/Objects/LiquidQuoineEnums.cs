@@ -48,4 +48,13 @@
     {
         Crypto, Fiat
     }
+    public enum PusherEvent
+    {
+        Created,
+        Updated,
+        Subscribe,
+        Unsubscribe,
+        ConnectionEstablished,
+        SubscribtionSucceeded,
+    }
 }

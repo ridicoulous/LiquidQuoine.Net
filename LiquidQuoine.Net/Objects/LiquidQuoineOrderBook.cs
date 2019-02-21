@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace LiquidQuoine.Net.Objects
 {
-    public partial class LiquidQuoineOrderBook
+    public class LiquidQuoineOrderBook
     {
         /// <summary>
         /// Asks
@@ -21,7 +21,6 @@ namespace LiquidQuoine.Net.Objects
     [JsonConverter(typeof(ArrayConverter))]
     public class LiquidQuoineOrderBookEntry
     {
-
         [ArrayProperty(0), JsonConverter(typeof(StringToDecimalConverter))]
         public decimal Price { get; set; }
         [ArrayProperty(1), JsonConverter(typeof(StringToDecimalConverter))]
