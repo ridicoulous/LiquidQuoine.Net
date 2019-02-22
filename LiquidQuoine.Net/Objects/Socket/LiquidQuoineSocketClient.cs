@@ -17,6 +17,31 @@ namespace LiquidQuoine.Net.Objects.Socket
 {
     public class LiquidQuoineSocketClient : SocketClient, ILiquidQuoineSocketClient
     {
+        /*
+         event":"pusher:subscribe","data":{"channel":"product_cash_qasheth_51"}}	73	
+
+
+
+12:49:45.748
+{"event":"pusher:subscribe","data":{"channel":"price_ladders_cash_qasheth_buy"}}	80	
+12:49:47.770
+{"event":"pusher:subscribe","data":{"channel":"price_ladders_cash_qasheth_sell"}}	81	
+12:49:47.770
+{"event":"pusher:subscribe","data":{"channel":"user_634841"}}	61	
+12:49:47.779
+{"event":"pusher:subscribe","data":{"channel":"executions_cash_qasheth"}}	73	
+12:49:48.662
+{"event":"pusher:subscribe","data":{"channel":"executions_634841_cash_qasheth"}}	80	
+12:49:48.666
+{"event":"pusher:subscribe","data":{"channel":"user_634841_account_eth"}}	73	
+12:49:49.220
+{"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_tickers"}}	84	
+12:49:50.965
+{"event":"pusher:unsubscribe","data":{"channel":"product_51_resolution_3600_tickers"}}	86	
+12:49:51.553
+{"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_tickers"}}	84	
+12:49:52.027
+*/
         private TimeSpan socketResponseTimeout = TimeSpan.FromSeconds(5);
 
         public LiquidQuoineSocketClient(LiquidQuoineSocketClientOptions options) : base(options, null)
@@ -34,6 +59,15 @@ namespace LiquidQuoine.Net.Objects.Socket
             var internalHandler = new Action<LiquidQuoineSubcribeUpdate<List<LiquidQuoineOrderBookEntry>>>(data =>
             {               
                 onData(data.Data,side);
+            });
+            return await Subscribe(request, internalHandler).ConfigureAwait(false);
+        }
+        public async Task<CallResult<UpdateSubscription>> SubscribeToExecutionsUpdatesAsync(string symbol, OrderSide side, Action<List<LiquidQuoineOrderBookEntry>, OrderSide> onData)
+        {
+            var request = new LiquidQuoineSubcribeRequest($"price_ladders_cash_{symbol.ToLower()}_{JsonConvert.SerializeObject(side, new OrderSideConverter())}");
+            var internalHandler = new Action<LiquidQuoineSubcribeUpdate<List<LiquidQuoineOrderBookEntry>>>(data =>
+            {
+                onData(data.Data, side);
             });
             return await Subscribe(request, internalHandler).ConfigureAwait(false);
         }
