@@ -16,9 +16,10 @@ namespace LiquidQuoine.Net.Converters
             { PusherEvent.Unsubscribe, "pusher:unsubscribe" },
             { PusherEvent.Updated, "updated" },
             { PusherEvent.Created, "created" },
-            { PusherEvent.Ping, "pusher:ping" }
+            { PusherEvent.Ping, "pusher:ping" },
+            { PusherEvent.OrdersUpdated, "orders_updated" },
 
-
+            
         };
     }
 }
