@@ -1,4 +1,5 @@
-﻿using LiquidQuoine.Net.Objects;
+﻿using LiquidQuoine.Net;
+using LiquidQuoine.Net.Objects;
 using LiquidQuoine.Net.Objects.Socket;
 using Newtonsoft.Json;
 using System;
@@ -12,6 +13,9 @@ namespace LiquidQuioine.Net.ConsoleClient
         {
             try
             {
+                var _client = new LiquidQuoineClient(new LiquidQuoineClientOptions() { });
+                _client.GetAllProducts();
+
                 LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions()
                 {
                     LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug
