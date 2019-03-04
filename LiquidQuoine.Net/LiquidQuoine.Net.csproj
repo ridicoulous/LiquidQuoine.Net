@@ -10,10 +10,10 @@
     <Company />
     <Product />
     <Description>C# api wrapper for Liquid.com by Quoine</Description>
-    <Version>0.0.6</Version>
-    <PackageReleaseNotes>bump</PackageReleaseNotes>
-    <AssemblyVersion>0.0.6.0</AssemblyVersion>
-    <FileVersion>0.0.6.0</FileVersion>
+    <Version>0.0.7</Version>
+    <PackageReleaseNotes>fixes of MyExecutions query and results</PackageReleaseNotes>
+    <AssemblyVersion>0.0.7.0</AssemblyVersion>
+    <FileVersion>0.0.7.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

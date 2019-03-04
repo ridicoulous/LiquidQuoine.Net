@@ -474,7 +474,6 @@ namespace LiquidQuoine.Net
             return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(result.Data, result.Error);
         }
 
-
         /// <summary>
         /// Get all Account Balances
         /// </summary>
