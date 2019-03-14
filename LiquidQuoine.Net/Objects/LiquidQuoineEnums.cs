@@ -56,6 +56,7 @@
         Unsubscribe,
         ConnectionEstablished,
         SubscribtionSucceeded,
-        Ping
+        Ping,
+        Pong
     }
 }
