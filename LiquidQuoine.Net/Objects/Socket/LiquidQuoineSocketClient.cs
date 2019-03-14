@@ -64,7 +64,7 @@ namespace LiquidQuoine.Net.Objects.Socket
         }
         public async Task<CallResult<UpdateSubscription>> SubscribeToExecutionsUpdatesAsync(string symbol, OrderSide side, Action<List<LiquidQuoineOrderBookEntry>, OrderSide> onData)
         {
-            var request = new LiquidQuoineSubcribeRequest($"price_ladders_cash_{symbol.ToLower()}_{JsonConvert.SerializeObject(side, new OrderSideConverter())}");
+            var request = new LiquidQuoineSubcribeRequest($"***{symbol.ToLower()}_{JsonConvert.SerializeObject(side, new OrderSideConverter())}");
             var internalHandler = new Action<LiquidQuoineSubcribeUpdate<List<LiquidQuoineOrderBookEntry>>>(data =>
             {
                 onData(data.Data, side);
@@ -90,7 +90,7 @@ namespace LiquidQuoine.Net.Objects.Socket
             return new CallResult<UpdateSubscription>(new UpdateSubscription(subscription), null);
         }
       
-
+        
         private bool DataHandler<T>(SocketSubscription subscription, JToken data, Action<T> handler) where T : class
         {          
             var desResult = Deserialize<T>(data.ToString().Replace("\"[[", "[[").Replace("]]\"", "]]").Replace("\\", ""), true);

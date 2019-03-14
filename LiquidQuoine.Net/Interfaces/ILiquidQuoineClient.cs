@@ -236,13 +236,15 @@ namespace LiquidQuoine.Net.Interfaces
         /// </summary>
         /// <param name="productId">Product id</param>   
         /// <returns></returns>
-        CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetMyExecutions(int productId);
+        CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetMyExecutions(int productId, int? limit = null, int? page = null);
         /// <summary>
-        /// Get Your Executions by product id
+        ///  Get Your Executions by product id
         /// </summary>
-        /// <param name="productId">Product id</param>   
+        /// <param name="productId">Id of product</param>
+        /// <param name="limit">limit of count of executions</param>
+        /// <param name="page">page of list of pages of executions</param>
         /// <returns></returns>
-        Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetMyExecutionsAsync(int productId);
+        Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetMyExecutionsAsync(int productId, int?limit=null, int?page=null);
 
 
 

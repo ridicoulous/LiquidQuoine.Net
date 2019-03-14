@@ -15,6 +15,9 @@ namespace LiquidQuoine.Net.Objects
 
         [JsonProperty("taker_side"), JsonConverter(typeof(OrderSideConverter))]
         public OrderSide TakerSide { get; set; }
+
+        [JsonProperty("my_side"), JsonConverter(typeof(OrderSideConverter))]
+        public OrderSide MySide { get; set; }
         //[JsonProperty("created_at"), JsonConverter(typeof(TimestampSecondsConverter))]
         //public DateTime CreatedAt { get; set; }
 

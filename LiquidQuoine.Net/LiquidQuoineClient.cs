@@ -458,20 +458,21 @@ namespace LiquidQuoine.Net
         /// </summary>
         /// <param name="productId">Product id</param>   
         /// <returns></returns>
-        public CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetMyExecutions(int productId) => GetMyExecutionsAsync(productId).Result;
+        public CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetMyExecutions(int productId, int? limit = null, int? page = null) => GetMyExecutionsAsync(productId,limit,page).Result;
         /// <summary>
         /// Get Your Executions by product id
         /// </summary>
         /// <param name="productId">Product id</param>   
         /// <returns></returns>
-        public async Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetMyExecutionsAsync(int productId)
+        public async Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetMyExecutionsAsync(int productId, int? limit = null, int? page = null)
         {
             var parameters = new Dictionary<string, object>();
             parameters.Add("product_id", productId);
+            parameters.AddOptionalParameter("limit", limit);
+            parameters.AddOptionalParameter("page", page);
             var result = await ExecuteRequest<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(GetUrl(GetMyExecutionsEndpoint), "GET", parameters, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(result.Data, result.Error);
         }
-
 
         /// <summary>
         /// Get all Account Balances

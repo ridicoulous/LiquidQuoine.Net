@@ -57,6 +57,7 @@
         ConnectionEstablished,
         SubscribtionSucceeded,
         Ping,
-        Pong
+        Pong,     
+        OrdersUpdated
     }
 }
