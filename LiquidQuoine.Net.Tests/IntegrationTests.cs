@@ -21,8 +21,8 @@ namespace LuqidExchange.Net.Tests
         [Fact]
         public void Should_Buy_Connect_To_Listen_BTCJPY_buy_levels()
         {
-            _socketclient.SubscribeToMyExecutions("QASHETH", _=>Console.WriteLine(JsonConvert.SerializeObject(_)));
-            Console.ReadLine();
+           // _socketclient.SubscribeToMyExecutions("QASHETH", _=>Console.WriteLine(JsonConvert.SerializeObject(_)));
+          
             Assert.True(1==1);
             Assert.True(1 == 1);
 
