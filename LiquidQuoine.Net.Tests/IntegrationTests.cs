@@ -14,9 +14,9 @@ namespace LuqidExchange.Net.Tests
         {
             //ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", "")
         });
-        LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions()
+        LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions("")
         {
-            UserId = "641444"
+          
         });
         [Fact]
         public void Should_Buy_Connect_To_Listen_BTCJPY_buy_levels()

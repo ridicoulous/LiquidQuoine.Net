@@ -14,10 +14,10 @@ namespace LiquidQuioine.Net.ConsoleClient
             try
             {             
 
-                LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions()
+                LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions("")
                 {
                     LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
-                            UserId = "641444"
+                     
                     //ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", "")
                 });
                 Console.WriteLine("subscrbng");
