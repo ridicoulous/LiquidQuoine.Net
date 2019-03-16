@@ -42,10 +42,12 @@ namespace LiquidQuoine.Net.Objects.Socket
 {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_tickers"}}	84	
 12:49:52.027
 */
+        private readonly string _currentUserId;
         private TimeSpan socketResponseTimeout = TimeSpan.FromSeconds(5);
 
         public LiquidQuoineSocketClient(LiquidQuoineSocketClientOptions options) : base(options, null)
         {
+            _currentUserId = options.UserId;
             Configure(options);
             log.Level = LogVerbosity.Debug;   
         }
@@ -62,12 +64,13 @@ namespace LiquidQuoine.Net.Objects.Socket
             });
             return await Subscribe(request, internalHandler).ConfigureAwait(false);
         }
-        public async Task<CallResult<UpdateSubscription>> SubscribeToExecutionsUpdatesAsync(string symbol, OrderSide side, Action<List<LiquidQuoineOrderBookEntry>, OrderSide> onData)
+        public CallResult<UpdateSubscription> SubscribeToMyExecutions(string symbol, Action<LiquidQuoineExecution> onData) => SubscribeToMyExecutionsUpdatesAsync(symbol, onData).Result;
+        public async Task<CallResult<UpdateSubscription>> SubscribeToMyExecutionsUpdatesAsync(string symbol,Action<LiquidQuoineExecution> onData)
         {
-            var request = new LiquidQuoineSubcribeRequest($"***{symbol.ToLower()}_{JsonConvert.SerializeObject(side, new OrderSideConverter())}");
-            var internalHandler = new Action<LiquidQuoineSubcribeUpdate<List<LiquidQuoineOrderBookEntry>>>(data =>
+            var request = new LiquidQuoineSubcribeRequest($"executions_{_currentUserId}_cash_{symbol.ToLower()}");
+            var internalHandler = new Action<LiquidQuoineSubcribeUpdate<LiquidQuoineExecution>>(data =>
             {
-                onData(data.Data, side);
+                onData(data.Data);
             });
             return await Subscribe(request, internalHandler).ConfigureAwait(false);
         }
@@ -93,7 +96,7 @@ namespace LiquidQuoine.Net.Objects.Socket
         
         private bool DataHandler<T>(SocketSubscription subscription, JToken data, Action<T> handler) where T : class
         {          
-            var desResult = Deserialize<T>(data.ToString().Replace("\"[[", "[[").Replace("]]\"", "]]").Replace("\\", ""), true);
+            var desResult = Deserialize<T>(data.ToString().Replace("\"[[", "[[").Replace("]]\"", "]]").Replace("\\", "").Replace("\"{","{").Replace("}\"", "}"), true);
             if (!desResult.Success)
             {
                 log.Write(LogVerbosity.Warning, $"Failed to deserialize data: {desResult.Error}. Data: {data}");

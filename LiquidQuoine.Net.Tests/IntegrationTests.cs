@@ -16,13 +16,13 @@ namespace LuqidExchange.Net.Tests
         });
         LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions()
         {
-            //ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", "")
+            UserId = "641444"
         });
         [Fact]
         public void Should_Buy_Connect_To_Listen_BTCJPY_buy_levels()
         {
-            _socketclient.SubscribeToOrderBookUpdates("QASHETH",OrderSide.Sell, (book,side) => Console.WriteLine(side+":\n"+JsonConvert.SerializeObject(book)));
-
+            _socketclient.SubscribeToMyExecutions("QASHETH", _=>Console.WriteLine(JsonConvert.SerializeObject(_)));
+            Console.ReadLine();
             Assert.True(1==1);
             Assert.True(1 == 1);
 

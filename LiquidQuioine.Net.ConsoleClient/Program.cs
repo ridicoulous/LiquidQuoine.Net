@@ -12,18 +12,17 @@ namespace LiquidQuioine.Net.ConsoleClient
         static void Main(string[] args)
         {
             try
-            {
-                var _client = new LiquidQuoineClient(new LiquidQuoineClientOptions() { });
-                _client.GetAllProducts();
+            {             
 
                 LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions()
                 {
-                    LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug
+                    LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
+                            UserId = "641444"
                     //ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", "")
                 });
                 Console.WriteLine("subscrbng");
-                _socketclient.SubscribeToOrderBookUpdates("QASHETH", OrderSide.Sell, (book,side) => Catch(book,side));
-                _socketclient.SubscribeToOrderBookUpdates("QASHETH", OrderSide.Buy, (book, side) => Catch(book, side));
+                _socketclient.SubscribeToMyExecutions("QASHETH", Catch);
+
 
 
                 Console.WriteLine("asdasdasd");
@@ -36,11 +35,18 @@ namespace LiquidQuioine.Net.ConsoleClient
 
             }
         }
-        private static void Catch(List<LiquidQuoineOrderBookEntry> events, OrderSide side)
+        private static void Catch(LiquidQuoineExecution e)
         {
-            var e = events;
-            Console.WriteLine(side);
-            Console.WriteLine(events[0].Price+ ":"+ events[0].Amount);
+            var eo = e;
+            try
+            {
+                Console.WriteLine(JsonConvert.SerializeObject(eo));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("hmmm");
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }

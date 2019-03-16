@@ -17,8 +17,8 @@ namespace LiquidQuoine.Net.Converters
             { PusherEvent.Updated, "updated" },
             { PusherEvent.Created, "created" },
             { PusherEvent.Ping, "pusher:ping" },
-            { PusherEvent.Pong, "pusher:pong" }
-            { PusherEvent.OrdersUpdated, "orders_updated" },
+            { PusherEvent.Pong, "pusher:pong" },
+            { PusherEvent.OrdersUpdated, "orders_updated" }
 
             
         };
