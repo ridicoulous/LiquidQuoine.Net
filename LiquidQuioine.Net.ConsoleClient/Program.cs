@@ -35,7 +35,7 @@ namespace LiquidQuioine.Net.ConsoleClient
 
             }
         }
-        private static void Catch(LiquidQuoineExecution e)
+        private static void Catch(LiquidQuoineExecution e, string symbol)
         {
             var eo = e;
             try

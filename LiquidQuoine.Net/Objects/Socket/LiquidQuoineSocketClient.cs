@@ -53,24 +53,24 @@ namespace LiquidQuoine.Net.Objects.Socket
         }
         #region private
       
-        public CallResult<UpdateSubscription> SubscribeToOrderBookUpdates(string symbol, OrderSide side, Action<List<LiquidQuoineOrderBookEntry>,OrderSide> onData) => SubscribeToOrderBookUpdatesAsync(symbol,side, onData).Result;
+        public CallResult<UpdateSubscription> SubscribeToOrderBookUpdates(string symbol, OrderSide side, Action<List<LiquidQuoineOrderBookEntry>,OrderSide,string> onData) => SubscribeToOrderBookUpdatesAsync(symbol,side, onData).Result;
 
-        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, OrderSide side, Action<List<LiquidQuoineOrderBookEntry>,OrderSide> onData)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, OrderSide side, Action<List<LiquidQuoineOrderBookEntry>,OrderSide, string> onData)
         {
             var request = new LiquidQuoineSubcribeRequest($"price_ladders_cash_{symbol.ToLower()}_{JsonConvert.SerializeObject(side,new OrderSideConverter())}");
             var internalHandler = new Action<LiquidQuoineSubcribeUpdate<List<LiquidQuoineOrderBookEntry>>>(data =>
             {               
-                onData(data.Data,side);
+                onData(data.Data,side,symbol);
             });
             return await Subscribe(request, internalHandler).ConfigureAwait(false);
         }
-        public CallResult<UpdateSubscription> SubscribeToMyExecutions(string symbol, Action<LiquidQuoineExecution> onData) => SubscribeToMyExecutionsUpdatesAsync(symbol, onData).Result;
-        public async Task<CallResult<UpdateSubscription>> SubscribeToMyExecutionsUpdatesAsync(string symbol,Action<LiquidQuoineExecution> onData)
+        public CallResult<UpdateSubscription> SubscribeToMyExecutions(string symbol, Action<LiquidQuoineExecution,string> onData) => SubscribeToMyExecutionsUpdatesAsync(symbol, onData).Result;
+        public async Task<CallResult<UpdateSubscription>> SubscribeToMyExecutionsUpdatesAsync(string symbol,Action<LiquidQuoineExecution,string> onData)
         {
             var request = new LiquidQuoineSubcribeRequest($"executions_{_currentUserId}_cash_{symbol.ToLower()}");
             var internalHandler = new Action<LiquidQuoineSubcribeUpdate<LiquidQuoineExecution>>(data =>
             {
-                onData(data.Data);
+                onData(data.Data,symbol);
             });
             return await Subscribe(request, internalHandler).ConfigureAwait(false);
         }
