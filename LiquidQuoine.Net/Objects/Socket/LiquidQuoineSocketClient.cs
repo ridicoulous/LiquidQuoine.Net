@@ -34,7 +34,7 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
         /// <summary>
         /// User id, eg 651514 and pair code e.g. ethusd
         /// </summary>
-        private const string UserExecutionsChannel = "executions_{}_cash_{}";
+        private const string UserExecutionsChannel = "executions_{}_cash_{}"; 
         /// <summary>
         /// User id, eg 651514 and pair ticker e.g. eth
         /// </summary>
@@ -60,17 +60,20 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
             var _myChannel = _pusherClient.Subscribe(FillPathParameter(OrderBookSideChannel, symbol, JsonConvert.SerializeObject(side, new OrderSideConverter())));
             _myChannel.Bind("updated", (dynamic data) =>
             {
-                Console.WriteLine(data);
-                onData(Deserialize<List<LiquidQuoineOrderBookEntry>>(data.ToString()), side, symbol);
+                string t = Convert.ToString(data);
+                List<LiquidQuoineOrderBookEntry> deserialized = Deserialize<List<LiquidQuoineOrderBookEntry>>(t).Data;
+                onData(deserialized, side, symbol);
             });
         }
 
-        public void SubscribeToUserExecutions(string symbol, Action<LiquidQuoineExecution, string> onData, string userId = null)
+        public void SubscribeToUserExecutions(string symbol, Action<LiquidQuoineExecution,string> onData, string userId = null)
         {
-            var _myChannel = _pusherClient.Subscribe(FillPathParameter(UserCurrencyUpdatesChannel, userId ?? _currentUserId, symbol));
+            var _myChannel = _pusherClient.Subscribe(FillPathParameter(UserExecutionsChannel, userId ?? _currentUserId, symbol));            
             _myChannel.Bind("created", (dynamic data) =>
             {
-                onData(Deserialize<LiquidQuoineExecution>(data.ToString()), symbol);
+                string t = Convert.ToString(data);
+                LiquidQuoineExecution deserialized = Deserialize<LiquidQuoineExecution>(t).Data;
+                onData(deserialized,symbol);
             });
         }
         public void SubscribeToExecutions(string symbol, Action<LiquidQuoineExecution, string> onData)
@@ -78,7 +81,9 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
             var _myChannel = _pusherClient.Subscribe(FillPathParameter(AllExecutionsChannel, symbol));
             _myChannel.Bind("created", (dynamic data) =>
             {
-                onData(Deserialize<LiquidQuoineExecution>(data.ToString()), symbol);
+                string t = Convert.ToString(data);
+                LiquidQuoineExecution deserialized = Deserialize<LiquidQuoineExecution>(t).Data;
+                onData(deserialized, symbol);
             });
         }
 

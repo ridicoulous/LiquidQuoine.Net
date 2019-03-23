@@ -17,12 +17,9 @@ namespace LiquidQuoine.Net.Objects
         public OrderSide MySide { get; set; }
         [JsonProperty("order_id")]
         public long MyOrderId { get; set; }
-
+        [JsonProperty("target")]
+        public string Target { get; set; }
+        [JsonProperty("pnl")]
+        public string Pnl { get; set; }
     }
 }
-/*
- {"event":"created",
- "data":"{\"id+\":99214134,\"quantity+\":\"10.0\",\"price+\":\"0.0010742\",\"taker_side+\":\"sell\",\"created_at+\":1552751727,\"my_side+\":\"buy\",\"pnl\":null,
- \"order_id+\":882566846,\"target\":\"spot\"}","channel":"executions_641444_cash_qasheth"}
-     
-     */

@@ -8,7 +8,7 @@ namespace LiquidQuoine.Net.Interfaces
     public interface ILiquidQuoineSocketClient
     {       
         void SubscribeToOrderBookSide(string symbol, OrderSide side, Action<List<LiquidQuoineOrderBookEntry>, OrderSide, string> onData);
-        void SubscribeToUserExecutions(string symbol, Action<LiquidQuoineExecution, string> onData, string userId = null);
+        void SubscribeToUserExecutions(string symbol, Action<LiquidQuoineExecution,string> onData, string userId = null);
         void SubscribeToExecutions(string symbol, Action<LiquidQuoineExecution, string> onData);
     }
 }

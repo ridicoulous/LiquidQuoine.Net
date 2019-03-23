@@ -17,13 +17,12 @@ namespace LiquidQuioine.Net.ConsoleClient
 
                 //pusher.Channels.AddOrUpdate("product_cash_btcusd_1", new Channel("product_cash_btcusd_1", pusher),_=>Up(_));
 
-                LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions("")
+                LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions("634841")
                 {
                     LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
-
-                    //ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", "")
+                  
                 });
-                _socketclient.SubscribeToOrderBookSide("qasheth", OrderSide.Buy, OnData);
+                _socketclient.SubscribeToOrderBookSide("qasheth", OrderSide.Buy,  OnData);
                 //Console.WriteLine("subscrbng");
                 //_socketclient.SubscribeToMyExecutions("QASHETH", Catch);
 
@@ -37,6 +36,19 @@ namespace LiquidQuioine.Net.ConsoleClient
                 Console.WriteLine(ex);
                 Console.ReadLine();
 
+            }
+        }
+
+        private static void OnData(LiquidQuoineExecution arg1,string t)
+        {
+            try
+            {
+                Console.WriteLine(JsonConvert.SerializeObject(arg1));
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.ToString());
             }
         }
 
