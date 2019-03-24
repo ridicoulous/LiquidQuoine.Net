@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace LiquidQuoine.Net.Objects
 {
+//2019.03.24 12:01:47:255 | Warning | Local object has property `margin_used` but was not found in received object of type `LiquidQuoinePlacedOrder`
+//2019.03.24 12:01:47:257 | Warning | Local object has property `margin_interest` but was not found in received object of type `LiquidQuoinePlacedOrder`
+//2019.03.24 12:01:47:259 | Warning | Local object has property `unwound_trade_leverage_level` but was not found in received object of type `LiquidQuoinePlacedOrder`
+//2019.03.24 12:01:47:260 | Warning | Local object has property `executions` but was not found in received object of type `LiquidQuoinePlacedOrder`
     public class LiquidQuoinePlacedOrder : LiquidQuoineBase
     {
 
@@ -36,12 +40,23 @@ namespace LiquidQuoine.Net.Objects
 
         [JsonProperty("source_exchange")]
         public string SourceExchange { get; set; }
+        [JsonProperty("crypto_account_id")]
+        public string CryptoAccountId { get; set; }
+        [JsonProperty("source_action")]
+        public string SourceAction { get; set; }
+        [JsonProperty("unwound_trade_id")]
+        public string UnwoundTradeId { get; set; }
+        [JsonProperty("trade_id")]
+        public string TradeId { get; set; }
 
         [JsonProperty("product_id")]
         public int ProductId { get; set; }
 
         [JsonProperty("product_code")]
         public string ProductCode { get; set; }
+
+        [JsonProperty("target")]
+        public string Target { get; set; }
 
         [JsonProperty("funding_currency")]
         public string FundingCurrency { get; set; }
@@ -51,6 +66,9 @@ namespace LiquidQuoine.Net.Objects
 
         [JsonProperty("order_fee"), JsonConverter(typeof(StringToDecimalConverter))]
         public decimal OrderFee { get; set; }
+
+        [JsonProperty("average_price"), JsonConverter(typeof(StringToDecimalConverter))]
+        public decimal AveragePrice { get; set; }
 
         [JsonProperty("margin_used"), JsonConverter(typeof(StringToDecimalConverter))]
         public decimal MarginUsed { get; set; }

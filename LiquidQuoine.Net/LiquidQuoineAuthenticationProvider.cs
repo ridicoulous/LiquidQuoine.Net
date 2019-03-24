@@ -12,6 +12,7 @@ namespace LiquidQuoine.Net
     {
         public LiquidQuoineAuthenticationProvider(ApiCredentials credentials) : base(credentials)
         {
+            
         }
         public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, string method, Dictionary<string, object> parameters, bool signed)
         {
