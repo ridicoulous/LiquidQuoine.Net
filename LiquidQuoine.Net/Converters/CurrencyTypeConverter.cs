@@ -8,10 +8,12 @@ namespace LiquidQuoine.Net.Converters
     {
         public CurrencyTypeConverter() : this(false) { }
         public CurrencyTypeConverter(bool quotes) : base(quotes) { }
-        protected override Dictionary<CurrencyTypes, string> Mapping => new Dictionary<CurrencyTypes, string>
+
+        protected override List<KeyValuePair<CurrencyTypes, string>> Mapping => new List<KeyValuePair<CurrencyTypes, string>>
         {
-            { CurrencyTypes.Crypto, "crypto" },
-            { CurrencyTypes.Fiat, "fiat" }
+            new KeyValuePair<CurrencyTypes, string>(CurrencyTypes.Crypto, "crypto"),
+            new KeyValuePair<CurrencyTypes, string>(CurrencyTypes.Fiat, "fiat"),
+        
         };
     }
 }

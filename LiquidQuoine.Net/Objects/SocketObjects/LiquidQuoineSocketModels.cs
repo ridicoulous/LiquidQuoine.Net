@@ -12,7 +12,7 @@ namespace LiquidQuoine.Net.Objects.SocketObjects
         {
             Signed = false;
         }
-        [JsonProperty("event"), JsonConverter(typeof(PusherEventConverter))]
+    //    [JsonProperty("event"), JsonConverter(typeof(PusherEventConverter))]
         public PusherEvent Event { get; set; }
     }
 

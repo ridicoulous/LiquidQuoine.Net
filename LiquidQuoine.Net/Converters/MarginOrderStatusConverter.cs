@@ -8,10 +8,12 @@ namespace LiquidQuoine.Net.Converters
     {
         public MarginOrderStatusConverter() : this(false) { }
         public MarginOrderStatusConverter(bool quotes) : base(quotes) { }
-        protected override Dictionary<MaringOrderStatus, string> Mapping => new Dictionary<MaringOrderStatus, string>
+
+        protected override List<KeyValuePair<MaringOrderStatus, string>> Mapping => new List<KeyValuePair<MaringOrderStatus, string>>
         {
-            { MaringOrderStatus.Closed, "closed" },
-            { MaringOrderStatus.Opened, "opened" },
+            new KeyValuePair<MaringOrderStatus, string>(MaringOrderStatus.Closed, "closed"),
+            new KeyValuePair<MaringOrderStatus, string>(MaringOrderStatus.Opened, "opened")
+
         };
     }
 }

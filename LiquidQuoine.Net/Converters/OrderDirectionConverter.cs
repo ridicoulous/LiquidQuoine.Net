@@ -8,11 +8,14 @@ namespace LiquidQuoine.Net.Converters
     {
         public OrderDirectionConverter() : this(false) { }
         public OrderDirectionConverter(bool quotes) : base(quotes) { }
-        protected override Dictionary<OrderDirection, string> Mapping => new Dictionary<OrderDirection, string>
+
+        protected override List<KeyValuePair<OrderDirection, string>> Mapping => new List<KeyValuePair<OrderDirection, string>>
         {
-            { OrderDirection.OneDirection, "one_direction" },
-            { OrderDirection.TwoDirection, "two_direction" },
-            { OrderDirection.Netout, "netout" },
+            new KeyValuePair<OrderDirection, string>(OrderDirection.OneDirection, "one_direction"),
+            new KeyValuePair<OrderDirection, string>(OrderDirection.OneDirection, "two_direction"),
+
+            new KeyValuePair<OrderDirection, string>(OrderDirection.OneDirection, "netout")
+
         };
     }
 }

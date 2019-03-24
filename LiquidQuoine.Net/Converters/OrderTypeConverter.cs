@@ -11,12 +11,12 @@ namespace LiquidQuoine.Net.Converters
         public OrderTypeConverter() : this(false) { }
         public OrderTypeConverter(bool quotes) : base(quotes) { }
 
-        protected override Dictionary<OrderType, string> Mapping => new Dictionary<OrderType, string>
+        protected override List<KeyValuePair<OrderType, string>> Mapping => new List<KeyValuePair<OrderType, string>>
         {
-            { OrderType.Limit, "limit" },
-            { OrderType.Market, "market" },
-            { OrderType.MarketWithRange, "market_with_range" },
-     
+            new KeyValuePair<OrderType, string>(OrderType.Limit, "canclimitelled"),
+            new KeyValuePair<OrderType, string>(OrderType.Market, "market"),
+            new KeyValuePair<OrderType, string>(OrderType.MarketWithRange, "market_with_range"),
+
         };
     }
 }
