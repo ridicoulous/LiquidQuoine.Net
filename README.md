@@ -44,9 +44,8 @@ Also check out other exchange API wrappers based on [JKorf's abstraction CryptoE
 ## Donations
 Donations are greatly appreciated and a motivation to keep improving.
 
-**Btc**:  12KwZk3r2Y3JZ2uMULcjqqBvXmpDwjhhQS  
-**Eth**:  0x069176ca1a4b1d6e0b7901a6bc0dbf3bb0bf5cc2  
-**Nano**: xrb_1ocs3hbp561ef76eoctjwg85w5ugr8wgimkj8mfhoyqbx4s1pbc74zggw7gs  
+**Btc**:  1KhYc4yQUHpj6tjpjh64KQ9Ki77N4srCxj  
+**Eth**:  0x84f892FaBCE99e3429a4318948B9bBe1434Bbe4A 
 
 ## Installation
 ![Nuget version](https://img.shields.io/nuget/v/liquidquoine.net.svg) ![Nuget downloads](https://img.shields.io/nuget/dt/LiquidQuoine.Net.svg)
