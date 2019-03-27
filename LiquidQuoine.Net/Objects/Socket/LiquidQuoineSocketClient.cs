@@ -16,7 +16,9 @@ namespace LiquidQuoine.Net.Objects.Socket
         /*
 
 12:49:49.220
-TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_tickers"}}	84	
+TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_tickers"}}	
+{"event":"pusher:subscribe","data":{"channel":"price_ladders_cash_btcusd_buy"}}
+4	
 */
 
         /// <summary>
@@ -57,7 +59,7 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
 
         public void SubscribeToOrderBookSide(string symbol, OrderSide side, Action<List<LiquidQuoineOrderBookEntry>, OrderSide, string> onData)
         {
-            var _myChannel = _pusherClient.Subscribe(FillPathParameter(OrderBookSideChannel, symbol, JsonConvert.SerializeObject(side, new OrderSideConverter())));
+            var _myChannel = _pusherClient.Subscribe(FillPathParameter(OrderBookSideChannel, symbol.ToLower(), JsonConvert.SerializeObject(side, new OrderSideConverter())));
             _myChannel.Bind("updated", (dynamic data) =>
             {
                 string t = Convert.ToString(data);
@@ -78,7 +80,7 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
         }
         public void SubscribeToExecutions(string symbol, Action<LiquidQuoineExecution, string> onData)
         {
-            var _myChannel = _pusherClient.Subscribe(FillPathParameter(AllExecutionsChannel, symbol));
+            var _myChannel = _pusherClient.Subscribe(FillPathParameter(AllExecutionsChannel, symbol.ToLower()));
             _myChannel.Bind("created", (dynamic data) =>
             {
                 string t = Convert.ToString(data);

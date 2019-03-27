@@ -17,12 +17,17 @@ namespace LiquidQuioine.Net.ConsoleClient
 
                 //pusher.Channels.AddOrUpdate("product_cash_btcusd_1", new Channel("product_cash_btcusd_1", pusher),_=>Up(_));
 
-                LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions("634841")
+                LiquidQuoineClient a = new LiquidQuoineClient(
+
+                    new LiquidQuoineClientOptions() { });
+                var t = a.GetExecutions(472, DateTime.UtcNow.AddDays(-1));
+
+                LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions("")
                 {
                     LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
                   
                 });
-                _socketclient.SubscribeToOrderBookSide("qasheth", OrderSide.Buy,  OnData);
+                _socketclient.SubscribeToOrderBookSide("btcusd", OrderSide.Buy,  OnData);
                 //Console.WriteLine("subscrbng");
                 //_socketclient.SubscribeToMyExecutions("QASHETH", Catch);
 
