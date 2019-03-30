@@ -488,6 +488,29 @@ namespace LiquidQuoine.Net
             var result = await ExecuteRequest<List<LiquidQouineAccountBalance>>(GetUrl(GetAllAccountsBalancesEndpoint), "GET", null, true).ConfigureAwait(false);
             return new CallResult<List<LiquidQouineAccountBalance>>(result.Data, result.Error);
         }
+
+        /// <summary>
+        /// Close a trade
+        /// </summary>
+        /// <param name="tradeId">Trade ID</param>
+        /// <param name="quantity">The quantity you want to close</param>
+        /// <returns></returns>
+        public CallResult<LiquidQuoineOrderTrade> CloseTrade(long tradeId, decimal? quantity = null) => CloseTradeAsync(tradeId, quantity).Result;
+        /// <summary>
+        /// Close a trade
+        /// </summary>
+        /// <param name="tradeId">Trade ID</param>
+        /// <param name="quantity">The quantity you want to close</param>
+        /// <returns></returns>
+        public async Task<CallResult<LiquidQuoineOrderTrade>> CloseTradeAsync(long tradeId, decimal? quantity = null)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("closed_quantity", quantity);
+
+            var result = await ExecuteRequest<LiquidQuoineOrderTrade>(GetUrl(FillPathParameter(CloseTradeEndpoint, tradeId.ToString())), "PUT", parameters, true).ConfigureAwait(false);
+            return new CallResult<LiquidQuoineOrderTrade>(result.Data, result.Error);
+        }
+
         #endregion
         public CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>> GetOrders(string fundingCurrency = null, int? productId = null, OrderStatus? status = null, bool withDetails = false) => GetOrdersAsync(fundingCurrency, productId, status, withDetails).Result;
 
@@ -505,6 +528,8 @@ namespace LiquidQuoine.Net
             var result = await ExecuteRequest<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>(GetUrl(GetOrdersEndpoint), "GET", parameters, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>(result.Data, result.Error);
         }
+
+
 
 
     }
