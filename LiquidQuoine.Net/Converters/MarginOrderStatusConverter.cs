@@ -12,7 +12,7 @@ namespace LiquidQuoine.Net.Converters
         protected override List<KeyValuePair<MaringOrderStatus, string>> Mapping => new List<KeyValuePair<MaringOrderStatus, string>>
         {
             new KeyValuePair<MaringOrderStatus, string>(MaringOrderStatus.Closed, "closed"),
-            new KeyValuePair<MaringOrderStatus, string>(MaringOrderStatus.Opened, "opened")
+            new KeyValuePair<MaringOrderStatus, string>(MaringOrderStatus.Open, "open")
 
         };
     }
