@@ -11,10 +11,10 @@ namespace LiquidQuoine.Net.Objects
         [JsonProperty("id")]
         public long Id { get; set; }
 
-        [JsonProperty("created_at"), JsonConverter(typeof(IsoDateTimeConverter))]
+        [JsonProperty("created_at"), JsonConverter(typeof(OrderTradeDateTimeConverter))]
         public DateTime CreatedAt { get; set; }
 
-        [JsonProperty("updated_at"), JsonConverter(typeof(IsoDateTimeConverter))]
+        [JsonProperty("updated_at"), JsonConverter(typeof(OrderTradeDateTimeConverter))]
         public DateTime UpdatedAt { get; set; }
 
         [JsonProperty("currency_pair_code")]
