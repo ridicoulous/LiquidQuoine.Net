@@ -4,7 +4,8 @@
     {
         Limit,
         Market,
-        MarketWithRange
+        MarketWithRange,
+        Stop
     }
     public enum OrderSide
     {

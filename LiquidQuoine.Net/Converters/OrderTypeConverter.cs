@@ -13,9 +13,10 @@ namespace LiquidQuoine.Net.Converters
 
         protected override List<KeyValuePair<OrderType, string>> Mapping => new List<KeyValuePair<OrderType, string>>
         {
-            new KeyValuePair<OrderType, string>(OrderType.Limit, "canclimitelled"),
+            new KeyValuePair<OrderType, string>(OrderType.Limit, "limit"),
             new KeyValuePair<OrderType, string>(OrderType.Market, "market"),
             new KeyValuePair<OrderType, string>(OrderType.MarketWithRange, "market_with_range"),
+            new KeyValuePair<OrderType, string>(OrderType.Stop, "stop"),
 
         };
     }

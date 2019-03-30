@@ -496,7 +496,10 @@ namespace LiquidQuoine.Net
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("funding_currency", fundingCurrency);
             parameters.AddOptionalParameter("product_id", productId);
-            parameters.AddOptionalParameter("status", JsonConvert.SerializeObject(status, new OrderStatusConverter()));
+            if (status != null)
+            {
+                parameters.AddOptionalParameter("status", JsonConvert.SerializeObject(status, new OrderStatusConverter()));
+            }
             if (withDetails)
                 parameters.AddParameter("with_details", 1);
             var result = await ExecuteRequest<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>(GetUrl(GetOrdersEndpoint), "GET", parameters, true).ConfigureAwait(false);
