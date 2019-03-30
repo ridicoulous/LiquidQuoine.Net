@@ -1,10 +1,21 @@
-﻿using LiquidQuoine.Net.Converters;
+﻿using CryptoExchange.Net.Converters;
+using LiquidQuoine.Net.Converters;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 
 namespace LiquidQuoine.Net.Objects
 {
-    public class LiquidQuoineOrderTrade : LiquidQuoineBase
+    public class LiquidQuoineOrderTrade
     {
+        [JsonProperty("id")]
+        public long Id { get; set; }
+
+        [JsonProperty("created_at"), JsonConverter(typeof(IsoDateTimeConverter))]
+        public DateTime CreatedAt { get; set; }
+
+        [JsonProperty("updated_at"), JsonConverter(typeof(IsoDateTimeConverter))]
+        public DateTime UpdatedAt { get; set; }
 
         [JsonProperty("currency_pair_code")]
         public string CurrencyPairCode { get; set; }
