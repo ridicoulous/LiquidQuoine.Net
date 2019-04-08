@@ -41,7 +41,7 @@
     }
     public enum MaringOrderStatus
     {
-        Opened,
+        Open,
         Closed
     }
 
