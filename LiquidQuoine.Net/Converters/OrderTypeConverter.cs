@@ -17,6 +17,7 @@ namespace LiquidQuoine.Net.Converters
             new KeyValuePair<OrderType, string>(OrderType.Market, "market"),
             new KeyValuePair<OrderType, string>(OrderType.MarketWithRange, "market_with_range"),
             new KeyValuePair<OrderType, string>(OrderType.Stop, "stop"),
+            new KeyValuePair<OrderType, string>(OrderType.Stop, "trailing_stop"),
 
         };
     }
