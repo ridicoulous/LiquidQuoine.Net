@@ -512,13 +512,17 @@ namespace LiquidQuoine.Net
         }
 
         #endregion
-        public CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>> GetOrders(string fundingCurrency = null, int? productId = null, OrderStatus? status = null, bool withDetails = false) => GetOrdersAsync(fundingCurrency, productId, status, withDetails).Result;
+        public CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>> GetOrders(string fundingCurrency = null, int? productId = null, OrderStatus? status = null, bool withDetails = false, int limit=1000, int page=1) => GetOrdersAsync(fundingCurrency, productId, status, withDetails, limit, page).Result;
 
-        public async Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>> GetOrdersAsync(string fundingCurrency = null, int? productId = null, OrderStatus? status = null, bool withDetails = false)
+        public async Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>> GetOrdersAsync(string fundingCurrency = null, int? productId = null, OrderStatus? status = null, bool withDetails = false, int limit=1000, int page=1)
         {
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("funding_currency", fundingCurrency);
             parameters.AddOptionalParameter("product_id", productId);
+            parameters.AddOptionalParameter("limit", limit);
+            parameters.AddOptionalParameter("page", page);
+
+
             if (status != null)
             {
                 parameters.AddOptionalParameter("status", JsonConvert.SerializeObject(status, new OrderStatusConverter()));

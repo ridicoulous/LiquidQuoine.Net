@@ -1,12 +1,15 @@
 ﻿using CryptoExchange.Net;
 using CryptoExchange.Net.Logging;
+using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 using LiquidQuoine.Net.Converters;
 using LiquidQuoine.Net.Interfaces;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PusherClient;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LiquidQuoine.Net.Objects.Socket
 {
@@ -53,7 +56,7 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
             _currentUserId = options.UserId;
             Configure(options);
             log.Level = LogVerbosity.Debug;
-            _pusherClient = new Pusher(options.PushherAppId, new PusherOptions() { ProtocolNumber = 7, Version = "4.4.0" });
+            _pusherClient = new Pusher(options.PushherAppId, new PusherOptions() { ProtocolNumber = 7, Version = "4.4.0",Endpoint = options.BaseAddress });
             _pusherClient.Connect();
         }
 
@@ -89,9 +92,36 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
             });
         }
 
-        protected override bool SocketReconnect(SocketSubscription subscription, TimeSpan disconnectedTime)
+
+
+        protected override bool HandleQueryResponse<T>(SocketConnection s, object request, JToken data, out CallResult<T> callResult)
         {
-            return true;
+            throw new NotImplementedException();
+        }
+
+        protected override bool HandleSubscriptionResponse(SocketConnection s, SocketSubscription subscription, object request, JToken message, out CallResult<object> callResult)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool MessageMatchesHandler(JToken message, object request)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool MessageMatchesHandler(JToken message, string identifier)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<CallResult<bool>> AuthenticateSocket(SocketConnection s)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<bool> Unsubscribe(SocketConnection connection, SocketSubscription s)
+        {
+            throw new NotImplementedException();
         }
     }
 }

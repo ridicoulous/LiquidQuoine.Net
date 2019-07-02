@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.329
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiquidQuoine.Net", "LiquidQuoine.Net\LiquidQuoine.Net.csproj", "{B308C2BE-43AF-455D-8B11-5D291AB80F75}"
 EndProject
@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiquidQuioine.Net.ConsoleClient", "LiquidQuioine.Net.ConsoleClient\LiquidQuioine.Net.ConsoleClient.csproj", "{28ADE4EC-D6A0-4261-8BE4-50AC3BB41FF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiquidQuioine.Net.ConsoleClient", "LiquidQuioine.Net.ConsoleClient\LiquidQuioine.Net.ConsoleClient.csproj", "{28ADE4EC-D6A0-4261-8BE4-50AC3BB41FF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
