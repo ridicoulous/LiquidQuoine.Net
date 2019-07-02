@@ -248,9 +248,9 @@ namespace LiquidQuoine.Net.Interfaces
 
 
 
-        CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>> GetOrders(string fundingCurrency=null, int? productId=null, OrderStatus? status=null, bool withDetails=false);
+        CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>> GetOrders(string fundingCurrency=null, int? productId=null, OrderStatus? status=null, bool withDetails= false, int limit = 1000, int page = 1);
 
-        Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>> GetOrdersAsync(string fundingCurrency = null, int? productId = null, OrderStatus? status = null, bool withDetails = false);
+        Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>> GetOrdersAsync(string fundingCurrency = null, int? productId = null, OrderStatus? status = null, bool withDetails = false, int limit = 1000, int page = 1);
 
         /// <summary>
         /// Ping to see if the server is reachable
