@@ -3,7 +3,7 @@ using System;
 
 namespace LiquidQuoine.Net
 {
-    public class LiquidQuoineClientOptions : ClientOptions
+    public class LiquidQuoineClientOptions : RestClientOptions
     {
         public LiquidQuoineClientOptions()
         {
