@@ -31,8 +31,8 @@ namespace LiquidQuoine.Net.Interfaces
         /// </summary>
         void RemoveRateLimiters();
 
-        CallResult<List<LiquidQouineAccountCurrencyBalance>> GetAccountBalance(string currency);
-        Task<CallResult<List<LiquidQouineAccountCurrencyBalance>>> GetAccountBalanceAsync(string currency);
+        CallResult<LiquidQouineAccountCurrencyBalance> GetAccountBalance(string currency);
+        Task<CallResult<LiquidQouineAccountCurrencyBalance>> GetAccountBalanceAsync(string currency);
 
 
         /// <summary>

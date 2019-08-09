@@ -535,12 +535,12 @@ namespace LiquidQuoine.Net
             return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>(result.Data, result.Error);
         }
 
-        public CallResult<List<LiquidQouineAccountCurrencyBalance>> GetAccountBalance(string currency) => GetAccountBalanceAsync(currency).Result;
+        public CallResult<LiquidQouineAccountCurrencyBalance> GetAccountBalance(string currency) => GetAccountBalanceAsync(currency).Result;
 
-        public async Task<CallResult<List<LiquidQouineAccountCurrencyBalance>>> GetAccountBalanceAsync(string currency)
+        public async Task<CallResult<LiquidQouineAccountCurrencyBalance>> GetAccountBalanceAsync(string currency)
         {
-            var result = await ExecuteRequest<List<LiquidQouineAccountCurrencyBalance>>(GetUrl(FillPathParameter(GetAccountBalanceEndpoint,currency)), "GET", null, true).ConfigureAwait(false);
-            return new CallResult<List<LiquidQouineAccountCurrencyBalance>>(result.Data, result.Error);
+            var result = await ExecuteRequest<LiquidQouineAccountCurrencyBalance>(GetUrl(FillPathParameter(GetAccountBalanceEndpoint,currency)), "GET", null, true).ConfigureAwait(false);
+            return new CallResult<LiquidQouineAccountCurrencyBalance>(result.Data, result.Error);
         }
     }
 }
