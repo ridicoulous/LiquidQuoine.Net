@@ -30,6 +30,11 @@ namespace LiquidQuoine.Net.Interfaces
         /// Removes all rate limiters from this client
         /// </summary>
         void RemoveRateLimiters();
+
+        CallResult<List<LiquidQouineAccountCurrencyBalance>> GetAccountBalance(string currency);
+        Task<CallResult<List<LiquidQouineAccountCurrencyBalance>>> GetAccountBalanceAsync(string currency);
+
+
         /// <summary>
         /// Get the list of all available products.
         /// </summary>
