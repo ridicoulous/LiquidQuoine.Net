@@ -101,7 +101,7 @@ namespace LiquidQuoine.Net
             var uriString = uri.ToString();
             if ((method == Constants.GetMethod || method == Constants.DeleteMethod || postParametersPosition == PostParameters.InUri) && parameters?.Any() == true)
             {
-                uriString += "?" + parameters.CreateParamString(true);
+                uriString += "?" + parameters.CreateParamString(true,ArrayParametersSerialization.MultipleValues);
             }
             var request = RequestFactory.Create(uriString);
             request.ContentType = requestBodyFormat == RequestBodyFormat.Json ? Constants.JsonContentHeader : Constants.FormContentHeader;
