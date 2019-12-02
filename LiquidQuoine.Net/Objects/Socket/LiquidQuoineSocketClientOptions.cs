@@ -11,7 +11,7 @@ namespace LiquidQuoine.Net.Objects.Socket
 
         public TimeSpan SocketResponseTimeout { get; set; } = TimeSpan.FromSeconds(5);
 
-        public LiquidQuoineSocketClientOptions(string userId, string pusherId= "2ff981bb060680b5ce97")
+        public LiquidQuoineSocketClientOptions(string userId, string pusherId= "2ff981bb060680b5ce97"):base("wss://echo.websocket.org")
         {
             UserId = userId;
             PushherAppId = pusherId;

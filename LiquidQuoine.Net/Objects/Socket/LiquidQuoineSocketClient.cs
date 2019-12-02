@@ -54,9 +54,14 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
         public LiquidQuoineSocketClient(LiquidQuoineSocketClientOptions options) : base(options, null)
         {
             _currentUserId = options.UserId;
-            Configure(options);
+           // Configure(options);
             log.Level = LogVerbosity.Debug;
-            _pusherClient = new Pusher(options.PushherAppId, new PusherOptions() { ProtocolNumber = 7, Version = "4.4.0",Endpoint = options.BaseAddress });
+            _pusherClient = new Pusher(options.PushherAppId, new PusherOptions() 
+            {
+                ProtocolNumber = 7,
+                Version = "4.4.0",
+                Endpoint = options.BaseAddress 
+            });
             _pusherClient.Connect();
         }
 

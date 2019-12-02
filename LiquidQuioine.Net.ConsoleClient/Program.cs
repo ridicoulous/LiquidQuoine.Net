@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using LiquidQuoine.Net;
+using LiquidQuoine.Net.Objects;
+using LiquidQuoine.Net.Objects.Socket;
+using Newtonsoft.Json;
 using PusherClient;
 using System;
 using System.Collections.Generic;
@@ -12,15 +15,17 @@ namespace LiquidQuioine.Net.ConsoleClient
             try
             {
 
+                var l = new LiquidQuoineClient();
+                var or = l.GetOrderBook(472);
                 //pusher.Channels.AddOrUpdate("product_cash_btcusd_1", new Channel("product_cash_btcusd_1", pusher),_=>Up(_));
 
-                //LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions("")
-                //{
-                //    LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
-                //    BaseAddress = "tap.liquid.com"
+                LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions("")
+                {
+                    LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,           
+                   // BaseAddress= "wss://tap.liquid.com/app/LiquidTapClient"
 
-                //});
-                //_socketclient.SubscribeToOrderBookSide("btcusd", OrderSide.Buy,  OnData);
+                });
+                _socketclient.SubscribeToOrderBookSide("btcusd", OrderSide.Buy, OnData);
                 //Console.WriteLine("subscrbng");
                 //_socketclient.SubscribeToMyExecutions("QASHETH", Catch);
 
@@ -35,6 +40,11 @@ namespace LiquidQuioine.Net.ConsoleClient
                 Console.ReadLine();
 
             }
+        }
+
+        private static void OnData(List<LiquidQuoineOrderBookEntry> arg1, OrderSide arg2, string arg3)
+        {
+            throw new NotImplementedException();
         }
 
         //private static void OnData(LiquidQuoineExecution arg1,string t)

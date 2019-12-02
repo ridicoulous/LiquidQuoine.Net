@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
 using System.Text;
 
 namespace LiquidQuoine.Net
@@ -14,7 +15,7 @@ namespace LiquidQuoine.Net
         {
             
         }
-        public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, string method, Dictionary<string, object> parameters, bool signed)
+        public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed)
         {
             var result = new Dictionary<string, string>();
             result.Add("X-Quoine-API-Version", "2");

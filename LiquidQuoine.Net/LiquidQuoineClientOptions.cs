@@ -5,9 +5,8 @@ namespace LiquidQuoine.Net
 {
     public class LiquidQuoineClientOptions : RestClientOptions
     {
-        public LiquidQuoineClientOptions()
-        {
-            BaseAddress = "https://api.liquid.com";            
+        public LiquidQuoineClientOptions():base("https://api.liquid.com")
+        {         
         }
     }
 }
