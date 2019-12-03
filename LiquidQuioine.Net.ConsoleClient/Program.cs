@@ -15,14 +15,25 @@ namespace LiquidQuioine.Net.ConsoleClient
             try
             {
 
+                var _apiClient = new LiquidQuoineClient(new LiquidQuoineClientOptions()
+                {
+                    ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", ""),
+                    LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug
+
+                });
+
+                var ord = _apiClient.PlaceOrder(472, OrderSide.Sell, OrderType.Limit, 10, 100000);
+
+
+
                 var l = new LiquidQuoineClient();
                 var or = l.GetOrderBook(472);
                 //pusher.Channels.AddOrUpdate("product_cash_btcusd_1", new Channel("product_cash_btcusd_1", pusher),_=>Up(_));
 
                 LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions("")
                 {
-                    LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,           
-                   // BaseAddress= "wss://tap.liquid.com/app/LiquidTapClient"
+                    LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
+                    // BaseAddress= "wss://tap.liquid.com/app/LiquidTapClient"
 
                 });
                 _socketclient.SubscribeToOrderBookSide("btcusd", OrderSide.Buy, OnData);
