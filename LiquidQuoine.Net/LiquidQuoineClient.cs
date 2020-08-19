@@ -97,7 +97,8 @@ namespace LiquidQuoine.Net
 
 
         #region Basic methods
-        protected override IRequest ConstructRequest(Uri uri, HttpMethod method, Dictionary<string, object> parameters, bool signed)
+ 
+        protected override IRequest ConstructRequest(Uri uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, PostParameters postPosition, ArrayParametersSerialization arraySerialization)
         {
             if (parameters == null)
                 parameters = new Dictionary<string, object>();
@@ -113,7 +114,7 @@ namespace LiquidQuoine.Net
 
             var headers = new Dictionary<string, string>();
             if (authProvider != null)
-                headers = authProvider.AddAuthenticationToHeaders(new Uri(uriString).PathAndQuery, method, null, signed);
+                headers = authProvider.AddAuthenticationToHeaders(new Uri(uriString).PathAndQuery, method, null, signed,postPosition,arraySerialization);
 
             foreach (var header in headers)
                 request.AddHeader(header.Key, header.Value);
