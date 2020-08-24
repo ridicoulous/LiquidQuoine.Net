@@ -98,7 +98,7 @@ namespace LiquidQuoine.Net
 
         #region Basic methods
  
-        protected override IRequest ConstructRequest(Uri uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, PostParameters postPosition, ArrayParametersSerialization arraySerialization)
+        protected override IRequest ConstructRequest(Uri uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, PostParameters postPosition, ArrayParametersSerialization arraySerialization, int requestId)
         {
             if (parameters == null)
                 parameters = new Dictionary<string, object>();
@@ -107,7 +107,7 @@ namespace LiquidQuoine.Net
             {
                 uriString += "?" + parameters.CreateParamString(true, ArrayParametersSerialization.MultipleValues);
             }
-            var request = RequestFactory.Create(method, uriString);
+            var request = RequestFactory.Create(method, uriString,requestId);
             //  string requestBodyFormat = RequestBodyFormat.Json ? Constants.JsonContentHeader : ;
             request.Accept = Constants.JsonContentHeader;
             request.Method = method;

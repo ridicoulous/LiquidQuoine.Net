@@ -10,14 +10,14 @@
     <Company />
     <Product />
     <Description>C# api wrapper for Liquid.com by Quoine</Description>
-    <Version>0.3.4</Version>
+    <Version>0.3.5</Version>
     <PackageReleaseNotes></PackageReleaseNotes>
     <AssemblyVersion>0.2.7.0</AssemblyVersion>
     <FileVersion>0.2.7.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="M.CryptoExchange.Net" Version="3.0.42-pre" />
+    <PackageReference Include="CryptoExchange.Net" Version="3.0.14" />
     <PackageReference Include="Pusher.NetStandard" Version="0.5.7" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
   </ItemGroup>
