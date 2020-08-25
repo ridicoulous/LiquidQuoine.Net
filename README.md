@@ -1,6 +1,6 @@
 # ![Icon](https://github.com/ridicoulous/LiquidQuoine.Net/blob/master/Resources/icon.png?raw=true) LiquidQuoine.Net 
 
-![Build status](https://travis-ci.org/ridicoulous/LiquidQuoine.Net.svg?branch=master)
+![build-nuget](https://github.com/ridicoulous/LiquidQuoine.Net/workflows/build-nuget/badge.svg)
 
 LiquidQuoine.Net is a .Net wrapper for the liquid.com (by Quoine) API as described on [documentation](https://developers.quoine.com/). It includes all features the API provides using clear and readable C# objects including 
 * Reading market info
@@ -14,32 +14,6 @@ LiquidQuoine.Net is a .Net wrapper for the liquid.com (by Quoine) API as describ
 Also check out other exchange API wrappers based on [JKorf's abstraction CryptoExchange.Net](https://github.com/JKorf/CryptoExchange.Net):
 <table>
 
-<tr>
-<td><a href="https://github.com/JKorf/Bitfinex.Net"><img src="https://github.com/JKorf/Bitfinex.Net/blob/master/Resources/icon.png?raw=true"></a>
-<br />
-<a href="https://github.com/JKorf/Bitfinex.Net">Bitfinex</a>
-</td>
-<td><a href="https://github.com/JKorf/Binance.Net"><img src="https://github.com/JKorf/Binance.Net/blob/master/Resources/binance-coin.png?raw=true"></a>
-<br />
-<a href="https://github.com/JKorf/Binance.Net">Binance</a>
-</td>
-<td><a href="https://github.com/JKorf/Bittrex.Net"><img src="https://github.com/JKorf/Bittrex.Net/blob/master/Resources/icon.png?raw=true"></a>
-<br />
-<a href="https://github.com/JKorf/Bittrex.Net">Bittrex</a>
-</td>
-<td><a href="https://github.com/JKorf/CoinEx.Net"><img src="https://github.com/JKorf/CoinEx.Net/blob/master/Resources/icon.png?raw=true"></a>
-<br />
-<a href="https://github.com/JKorf/CoinEx.Net">CoinEx</a>
-</td>
-<td><a href="https://github.com/JKorf/Huobi.Net"><img src="https://github.com/JKorf/Huobi.Net/blob/master/Resources/icon.png?raw=true"></a>
-<br />
-<a href="https://github.com/JKorf/Huobi.Net">Huobi</a>
-</td>
-<td><a href="https://github.com/Zaliro/Switcheo.Net"><img src="https://github.com/Zaliro/Switcheo.Net/blob/master/Resources/switcheo-coin.png?raw=true"></a>
-<br />
-<a href="https://github.com/Zaliro/Switcheo.Net">Switcheo</a>
-</tr>
-</table>
 
 ## Donations
 Donations are greatly appreciated and a motivation to keep improving.
@@ -108,6 +82,7 @@ The default behavior of the clients can be changed by providing options to the c
 
 
 ## Release notes
+
 * Version 0.0.2 - 04 feb 2019
 	* Orders implemented
 * Version 0.0.1 - 03 feb 2019
