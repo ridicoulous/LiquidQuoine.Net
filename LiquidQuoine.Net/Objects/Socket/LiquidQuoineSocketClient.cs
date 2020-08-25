@@ -60,7 +60,11 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
             {
                 ProtocolNumber = 7,
                 Version = "4.4.0",
-                Endpoint = options.BaseAddress 
+                Endpoint = "tap.liquid.com",
+                Encrypted=true,
+                Client="",
+                
+                
             });
             _pusherClient.Connect();
         }
