@@ -12,9 +12,8 @@ namespace LiquidQuoine.Net.Converters
         protected override List<KeyValuePair<OrderDirection, string>> Mapping => new List<KeyValuePair<OrderDirection, string>>
         {
             new KeyValuePair<OrderDirection, string>(OrderDirection.OneDirection, "one_direction"),
-            new KeyValuePair<OrderDirection, string>(OrderDirection.OneDirection, "two_direction"),
-
-            new KeyValuePair<OrderDirection, string>(OrderDirection.OneDirection, "netout")
+            new KeyValuePair<OrderDirection, string>(OrderDirection.TwoDirection, "two_direction"),
+            new KeyValuePair<OrderDirection, string>(OrderDirection.Netout, "netout")
 
         };
     }

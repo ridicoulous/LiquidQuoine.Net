@@ -30,14 +30,15 @@ namespace LiquidQuioine.Net.ConsoleClient
             //    var or = l.GetOrderBook(472);
             //    //pusher.Channels.AddOrUpdate("product_cash_btcusd_1", new Channel("product_cash_btcusd_1", pusher),_=>Up(_));
 
-                LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions("")
+                LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions( )
                 {
-                    LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
+                   // LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
                     // BaseAddress= "wss://tap.liquid.com/app/LiquidTapClient"
 
                 });
                // _socketclient.SubscribeToOrderBookSide("btcusd", OrderSide.Buy, OnData);
                 _socketclient.SubscribeToExecutions("btcusd", Ontrade);
+               // _socketclient.Authenticate();
                 //Console.WriteLine("subscrbng");
                 //_socketclient.SubscribeToMyExecutions("QASHETH", Catch);
 

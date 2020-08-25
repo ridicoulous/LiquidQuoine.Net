@@ -14,7 +14,7 @@ namespace LuqidExchange.Net.Tests
         {
             //ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", "")
         });
-        LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions("")
+        LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions()
         {
           
         });

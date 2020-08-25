@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pusher.NetStandard" Version="0.5.7" />
+    <PackageReference Include="Pusher.NetStandard" Version="0.5.9" />
   </ItemGroup>
 
   <ItemGroup>

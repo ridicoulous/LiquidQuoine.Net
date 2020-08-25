@@ -5,15 +5,24 @@ namespace LiquidQuoine.Net.Objects.Socket
 {
     public class LiquidQuoineSocketClientOptions : SocketClientOptions
     {       
-        public string UserId { get; set; }
-        public string PushherAppId { get; set; }        
+        public string PushherAppId { get; set; }
+        public readonly LiquidQuoineAuthenticationProvider authenticationProvider;
 
-        public LiquidQuoineSocketClientOptions(string userId, string pusherId= "LiquidTapClient") :base("wss://tap.liquid.com")
+        public LiquidQuoineSocketClientOptions() :base("wss://tap.liquid.com")
+        {            
+            PushherAppId = "LiquidTapClient";
+        }
+        public LiquidQuoineSocketClientOptions(string key, string secret) : base("wss://tap.liquid.com")
         {
-            UserId = userId;
-            PushherAppId = pusherId;
+            authenticationProvider = new LiquidQuoineAuthenticationProvider(new CryptoExchange.Net.Authentication.ApiCredentials(key, secret));
+          
+            PushherAppId = "LiquidTapClient";
+        }
+        public LiquidQuoineSocketClientOptions(LiquidQuoineAuthenticationProvider auth) : base("wss://tap.liquid.com")
+        {
+            authenticationProvider = auth;          
+            PushherAppId = "LiquidTapClient";
         }
 
-    
     }
 }
