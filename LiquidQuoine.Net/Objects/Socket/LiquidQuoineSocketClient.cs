@@ -9,6 +9,8 @@ using Newtonsoft.Json.Linq;
 using PusherClient;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -16,16 +18,11 @@ namespace LiquidQuoine.Net.Objects.Socket
 {
     public class LiquidQuoineSocketClient : SocketClient, ILiquidQuoineSocketClient
     {
-        private Pusher _pusherClient;
+        private readonly Pusher _pusherClient;
         /*
 TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_tickers"}}	
 {"event":"pusher:subscribe","data":{"channel":"price_ladders_cash_btcusd_buy"}}
 */
-
-        /// <summary>
-        /// need to send user id, eg 651514
-        /// </summary>
-        private const string UserInfoChannel = "user_{}";
         /// <summary>
         /// need to send pair code e.g. ethusd and pair id, e.g. 27
         /// </summary>
@@ -33,26 +30,43 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
         /// <summary>
         /// Pair code e.g. ethusd
         /// </summary>
-        private const string AllExecutionsChannel = "executions_cash_{}";
-        /// <summary>
-        /// User id, eg 651514 and pair code e.g. ethusd
-        /// </summary>
-        private const string UserExecutionsChannel = "executions_{}_cash_{}";
-        /// <summary>
-        /// User id, eg 651514 and pair ticker e.g. eth
-        /// </summary>
-        private const string UserCurrencyUpdatesChannel = "user_{}_account_{}";
+        private const string AllExecutionsChannel = "executions_cash_{}";      
         /// <summary>
         /// need to send pair code e.g. ethusd and pair id, e.g. 27
         /// </summary>
         private const string OrderBookSideChannel = "price_ladders_cash_{}_{}";
-        private readonly string _currentUserId;
+        /// <summary>
+        /// New order appears in ladder Existing order updated in ladder Order is removed from ladder * Displays both bid and ask prices of the selected market. 
+        /// params: code, currency_pair_code
+        /// </summary>
+        private const string UserAccountPriceBookEndpoint = "price_ladders_{}_{}";
+        /// <summary>
+        /// User’s order is created
+        ///User’s order is cancelled
+        ///User’s order is filled
+        ///Order’s stop-loss or take profit is updated.
+        ///params: order dunding currency
+        /// </summary>
+        private const string UserAccountOrdersEndpoint = "user_account_{}_orders";
+        /// <summary>
+        /// User’s position is created,        User’s position is closed
+        /// params: order dunding currency
+        /// </summary>
+        private const string UserAccountTradesEndpoint = "user_account_{}_trades";
+        /// <summary>
+        /// User’s execution is created
+        /// params: currency_pair_code
+        /// </summary>
+        private const string UserAccountExecutionsEndpoint = "user_executions_cash_{}";
+
+
+
         private TimeSpan socketResponseTimeout = TimeSpan.FromSeconds(5);
 
         public LiquidQuoineSocketClient(LiquidQuoineSocketClientOptions options) : base(options, null)
         {
             authProvider = options.authenticationProvider;
-            _currentUserId = options.UserId;
+            
             // Configure(options);
             log.Level = LogVerbosity.Debug;
             _pusherClient = new Pusher(options.PushherAppId, new PusherOptions()
@@ -93,16 +107,7 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
             });
         }
 
-        public void SubscribeToUserExecutions(string symbol, Action<LiquidQuoineExecution, string> onData, string userId = null)
-        {
-            var _myChannel = _pusherClient.Subscribe(FillPathParameter(UserExecutionsChannel, userId ?? _currentUserId, symbol));
-            _myChannel.Bind("created", (dynamic data) =>
-            {
-                string t = Convert.ToString(data);
-                LiquidQuoineExecution deserialized = Deserialize<LiquidQuoineExecution>(t).Data;
-                onData(deserialized, symbol);
-            });
-        }
+       
         public void SubscribeToExecutions(string symbol, Action<LiquidQuoineExecution, string> onData)
         {
             var _myChannel = _pusherClient.Subscribe(FillPathParameter(AllExecutionsChannel, symbol.ToLower()));
@@ -113,8 +118,47 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
                 onData(deserialized, symbol);
             });
         }
-
-
+        /// <summary>
+        /// By default when not send user preffered fundingCurrensies, subscribes to each pair for each funding currency ("usd", "btc", "cash", "eth").
+        /// </summary>
+        /// <param name="onData">action on update</param>
+        /// <param name="fundingCurrensies">user preffered funding currencies</param>
+        public void SubscribeToUserOrdersUpdate(Action<LiquidQuoinePlacedOrder> onData, string[] fundingCurrensies=null)
+        {
+            if (authProvider == null)
+                throw new Exception("for subscribing to private channels you must provide api credentials");
+            if (fundingCurrensies == null || !fundingCurrensies.Any())
+            {
+                fundingCurrensies = new string[] { "usd", "btc", "cash", "eth" };
+            }
+            foreach(var fundingCurrency in fundingCurrensies)
+            {
+                var channel = _pusherClient.Subscribe(FillPathParameter(UserAccountOrdersEndpoint, fundingCurrency));
+                channel.Bind("update", (dynamic data) =>
+                {
+                    string t = Convert.ToString(data);
+                    LiquidQuoinePlacedOrder deserialized = Deserialize<LiquidQuoinePlacedOrder>(t,false).Data;
+                    onData(deserialized);
+                });
+            }
+        }
+        /// <summary>
+        /// subscribes to user executions
+        /// </summary>
+        /// <param name="symbol">currency_pair_code at liquid </param>
+        /// <param name="onData"></param>
+        public void SubscribeToUserExecutions(string symbol, Action<LiquidQuoineExecution, string> onData)
+        {
+            if (authProvider == null)
+                throw new Exception("for subscribing to private channels you must provide api credentials");
+            var _myChannel = _pusherClient.Subscribe(FillPathParameter(UserAccountExecutionsEndpoint, symbol));
+            _myChannel.Bind("update", (dynamic data) =>
+            {
+                string t = Convert.ToString(data);
+                LiquidQuoineExecution deserialized = Deserialize<LiquidQuoineExecution>(t).Data;
+                onData(deserialized, symbol);
+            });
+        }
 
         protected override bool HandleQueryResponse<T>(SocketConnection s, object request, JToken data, out CallResult<T> callResult)
         {
