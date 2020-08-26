@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>liquid.com CryptoCurrency  crypto-exchange API wrapper</PackageTags>
     <RepositoryUrl>https://github.com/ridicoulous/LiquidQuoine.Net</RepositoryUrl>
@@ -18,8 +18,8 @@
 
   <ItemGroup>
     <PackageReference Include="CryptoExchange.Net" Version="3.0.14" />
-    <PackageReference Include="Pusher.NetStandard" Version="0.5.7" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
+    <PackageReference Include="Pusher.NetStandard" Version="0.5.9" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
   </ItemGroup>
 
 </Project>

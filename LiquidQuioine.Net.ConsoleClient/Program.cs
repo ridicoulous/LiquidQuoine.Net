@@ -15,28 +15,30 @@ namespace LiquidQuioine.Net.ConsoleClient
             try
             {
 
-                var _apiClient = new LiquidQuoineClient(new LiquidQuoineClientOptions()
+            //    var _apiClient = new LiquidQuoineClient(new LiquidQuoineClientOptions()
+            //    {
+            //        ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", ""),
+            //        LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug
+
+            //    });
+
+            //    var ord = _apiClient.PlaceOrder(472, OrderSide.Sell, OrderType.Limit, 10, 100000);
+
+
+
+            //    var l = new LiquidQuoineClient();
+            //    var or = l.GetOrderBook(472);
+            //    //pusher.Channels.AddOrUpdate("product_cash_btcusd_1", new Channel("product_cash_btcusd_1", pusher),_=>Up(_));
+
+                LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions( )
                 {
-                    ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("", ""),
-                    LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug
-
-                });
-
-                var ord = _apiClient.PlaceOrder(472, OrderSide.Sell, OrderType.Limit, 10, 100000);
-
-
-
-                var l = new LiquidQuoineClient();
-                var or = l.GetOrderBook(472);
-                //pusher.Channels.AddOrUpdate("product_cash_btcusd_1", new Channel("product_cash_btcusd_1", pusher),_=>Up(_));
-
-                LiquidQuoineSocketClient _socketclient = new LiquidQuoineSocketClient(new LiquidQuoineSocketClientOptions("")
-                {
-                    LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
+                   // LogVerbosity = CryptoExchange.Net.Logging.LogVerbosity.Debug,
                     // BaseAddress= "wss://tap.liquid.com/app/LiquidTapClient"
 
                 });
-                _socketclient.SubscribeToOrderBookSide("btcusd", OrderSide.Buy, OnData);
+               // _socketclient.SubscribeToOrderBookSide("btcusd", OrderSide.Buy, OnData);
+                _socketclient.SubscribeToExecutions("btcusd", Ontrade);
+               // _socketclient.Authenticate();
                 //Console.WriteLine("subscrbng");
                 //_socketclient.SubscribeToMyExecutions("QASHETH", Catch);
 
@@ -53,9 +55,17 @@ namespace LiquidQuioine.Net.ConsoleClient
             }
         }
 
+        private static void Ontrade(LiquidQuoineExecution arg1, string arg2)
+        {
+            Console.WriteLine(arg1.Price);
+        }
+
         private static void OnData(List<LiquidQuoineOrderBookEntry> arg1, OrderSide arg2, string arg3)
         {
-            throw new NotImplementedException();
+            foreach(var update in arg1)
+            {
+                Console.WriteLine($"{arg3}:{arg2}{update.Price}");
+            }
         }
 
         //private static void OnData(LiquidQuoineExecution arg1,string t)
