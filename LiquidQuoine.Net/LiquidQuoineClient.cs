@@ -484,12 +484,42 @@ namespace LiquidQuoine.Net
         }
 
         /// <summary>
-        /// Get all Account Balances
+        /// Get all Fiat Account Balances
+        /// </summary>
+        /// <returns></returns>
+        public CallResult<List<LiquidQuoineFiatAccount>> GetFiatAccountsBalances() => GetFiatAccountsBalancesAsync().Result;
+        /// <summary>
+        /// Get all Fiat Account Balances
+        /// </summary>
+        /// <returns></returns>
+        public async Task<CallResult<List<LiquidQuoineFiatAccount>>> GetFiatAccountsBalancesAsync(CancellationToken ct = default)
+        {
+            var result = await SendRequest<List<LiquidQuoineFiatAccount>>(GetUrl(GetFiatAccountsEndpoint), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
+            return new CallResult<List<LiquidQuoineFiatAccount>>(result.Data, result.Error);
+        }
+
+        /// <summary>
+        /// Get all Crypto Account Balances
+        /// </summary>
+        /// <returns></returns>
+        public CallResult<List<LiquidQuoineCryptoAccount>> GetCryptoAccountsBalances() => GetCryptoAccountsBalancesAsync().Result;
+        /// <summary>
+        /// Get all Crypto Account Balances
+        /// </summary>
+        /// <returns></returns>
+        public async Task<CallResult<List<LiquidQuoineCryptoAccount>>> GetCryptoAccountsBalancesAsync(CancellationToken ct = default)
+        {
+            var result = await SendRequest<List<LiquidQuoineCryptoAccount>>(GetUrl(GetCryptoAccountsEndpoint), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
+            return new CallResult<List<LiquidQuoineCryptoAccount>>(result.Data, result.Error);
+        }
+
+        /// <summary>
+        /// Get all Account Balances - without reserved info
         /// </summary>
         /// <returns></returns>
         public CallResult<List<LiquidQouineAccountBalance>> GetAccountsBalances() => GetAccountsBalancesAsync().Result;
         /// <summary>
-        /// Get all Account Balances
+        /// Get all Account Balances - without reserved info
         /// </summary>
         /// <returns></returns>
         public async Task<CallResult<List<LiquidQouineAccountBalance>>> GetAccountsBalancesAsync(CancellationToken ct = default)

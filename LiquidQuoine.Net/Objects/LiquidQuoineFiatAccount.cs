@@ -6,7 +6,7 @@ using System.Text;
 
 namespace LiquidQuoine.Net.Objects
 {
-    public class LiquidQuoineFiatAccount
+    public class LiquidQuoineAccountBase
     {
         [JsonProperty("id")]
         public long Id { get; set; }
@@ -20,6 +20,9 @@ namespace LiquidQuoine.Net.Objects
         [JsonProperty("balance"),JsonConverter(typeof(StringToDecimalConverter))]
         public decimal Balance { get; set; }
 
+        [JsonProperty("reserved_balance"),JsonConverter(typeof(StringToDecimalConverter))]
+        public decimal ReservedBalance { get; set; }
+
         [JsonProperty("pusher_channel")]
         public string PusherChannel { get; set; }
 
@@ -29,16 +32,22 @@ namespace LiquidQuoine.Net.Objects
         [JsonProperty("highest_offer_interest_rate"), JsonConverter(typeof(StringToDecimalConverter))]
         public decimal HighestOfferInterestRate { get; set; }
 
-        [JsonProperty("exchange_rate"), JsonConverter(typeof(StringToDecimalConverter))]
-        public decimal ExchangeRate { get; set; }
-
         [JsonProperty("currency_type"), JsonConverter(typeof(CurrencyTypeConverter))]
         public CurrencyTypes CurrencyType { get; set; }
+    }
 
-        [JsonProperty("margin"), JsonConverter(typeof(StringToDecimalConverter))]
-        public decimal Margin { get; set; }
+    public class LiquidQuoineFiatAccount : LiquidQuoineAccountBase
+    {
+        [JsonProperty("address")]
+        public decimal Address { get; set; }
 
-        [JsonProperty("free_margin"), JsonConverter(typeof(StringToDecimalConverter))]
-        public decimal FreeMargin { get; set; }
+        [JsonProperty("minimum_withdraw"), JsonConverter(typeof(StringToDecimalConverter))]
+        public decimal MinimumWithdraw { get; set; }
+    }
+
+    public class LiquidQuoineCryptoAccount : LiquidQuoineAccountBase
+    {
+        [JsonProperty("exchange_rate"), JsonConverter(typeof(StringToDecimalConverter))]
+        public decimal ExchangeRate { get; set; }
     }
 }
