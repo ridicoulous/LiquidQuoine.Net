@@ -63,7 +63,7 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
 
         private TimeSpan socketResponseTimeout = TimeSpan.FromSeconds(5);
 
-        public LiquidQuoineSocketClient(LiquidQuoineSocketClientOptions options) : base(options, null)
+        public LiquidQuoineSocketClient(LiquidQuoineSocketClientOptions options) : base(nameof(LiquidQuoineSocketClient),options, null)
         {
             authProvider = options.authenticationProvider;
             
