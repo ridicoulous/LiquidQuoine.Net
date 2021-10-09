@@ -74,5 +74,8 @@ namespace LiquidQuoine.Net.Objects
 
         [JsonProperty("exchange_rate"), JsonConverter(typeof(StringToDecimalConverter))]
         public decimal ExchangeRate { get; set; }
+
+        [JsonProperty("disabled")]
+        public bool IsDisabled { get; set; }
     }
 }
