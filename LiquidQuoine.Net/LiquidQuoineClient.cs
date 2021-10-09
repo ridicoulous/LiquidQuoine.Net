@@ -68,7 +68,7 @@ namespace LiquidQuoine.Net
         /// <summary>
         /// Create a new instance of the LiquidQuoineClient with the provided options
         /// </summary>
-        public LiquidQuoineClient(LiquidQuoineClientOptions options) : base(nameof(LiquidQuoineClient),options, options.ApiCredentials == null ? null : new LiquidQuoineAuthenticationProvider(options.ApiCredentials))
+        public LiquidQuoineClient(LiquidQuoineClientOptions options) : base("Liquid", options, options.ApiCredentials == null ? null : new LiquidQuoineAuthenticationProvider(options.ApiCredentials))
         {
             log.Level = CryptoExchange.Net.Logging.LogVerbosity.Debug;
         }
