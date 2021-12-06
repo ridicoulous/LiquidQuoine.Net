@@ -4,6 +4,7 @@ using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 using LiquidQuoine.Net.Converters;
 using LiquidQuoine.Net.Interfaces;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PusherClient;
@@ -68,7 +69,7 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
             authProvider = options.authenticationProvider;
             
             // Configure(options);
-            log.Level = LogVerbosity.Debug;
+            log.Level = LogLevel.Debug;
             _pusherClient = new Pusher(options.PushherAppId, new PusherOptions()
             {
                 ProtocolNumber = 7,
@@ -84,7 +85,7 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
 
         private void _pusherClient_Connected(object sender)
         {
-            log.Write(LogVerbosity.Debug,"Liquid client is connected");
+            log.Write(LogLevel.Debug,"Liquid client is connected");
             if (authProvider != null)
             {
                 Authenticate();
@@ -93,7 +94,7 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
 
         private void _pusherClient_ConnectionStateChanged(object sender, ConnectionState state)
         {
-            log.Write(LogVerbosity.Debug,$"Socket client {sender} state setted to {state.ToString()}");
+            log.Write(LogLevel.Debug,$"Socket client {sender} state setted to {state.ToString()}");
         }
 
         public void SubscribeToOrderBookSide(string symbol, OrderSide side, Action<List<LiquidQuoineOrderBookEntry>, OrderSide, string> onData)
@@ -180,12 +181,12 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
             throw new NotImplementedException();
         }
 
-        protected override Task<CallResult<bool>> AuthenticateSocket(SocketConnection s)
+        protected override Task<CallResult<bool>> AuthenticateSocketAsync(SocketConnection s)
         {
             throw new NotImplementedException();
         }
 
-        protected override Task<bool> Unsubscribe(SocketConnection connection, SocketSubscription s)
+        protected override Task<bool> UnsubscribeAsync(SocketConnection connection, SocketSubscription s)
         {
             throw new NotImplementedException();
         }
@@ -195,7 +196,7 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
             if (authProvider == null)
                 throw new Exception("You must provide api credentials to subscribing to private streams");
 
-            var p = authProvider.AddAuthenticationToHeaders("/realtime", HttpMethod.Get, new Dictionary<string, object>(), true, PostParameters.InBody, ArrayParametersSerialization.Array);
+            var p = authProvider.AddAuthenticationToHeaders("/realtime", HttpMethod.Get, new Dictionary<string, object>(), true, HttpMethodParameterPosition.InBody, ArrayParametersSerialization.Array);
             var t = JsonConvert.SerializeObject(new { @event= "quoine:auth_request", data= new{ path = "/realtime", headers = new Dictionary<string, string>() { { "X-Quoine-Auth", p["X-Quoine-Auth"] } }} });
             Console.WriteLine(t);
             _pusherClient.Bind("quoine:auth_success", onSuccessAuth);
@@ -205,13 +206,13 @@ TODO: {"event":"pusher:subscribe","data":{"channel":"product_51_resolution_3600_
 
         private void onNotSuccessAuth(dynamic obj)
         {
-            log.Write(LogVerbosity.Error, "Can not open private stream");
+            log.Write(LogLevel.Error, "Can not open private stream");
 
         }
 
         private void onSuccessAuth(dynamic obj)
         {
-            log.Write(LogVerbosity.Debug, "succesfully authenticated to private stream");
+            log.Write(LogLevel.Debug, "succesfully authenticated to private stream");
         }
     }
 }

@@ -6,6 +6,7 @@ using CryptoExchange.Net.Objects;
 using LiquidQuoine.Net.Converters;
 using LiquidQuoine.Net.Interfaces;
 using LiquidQuoine.Net.Objects;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -70,7 +71,7 @@ namespace LiquidQuoine.Net
         /// </summary>
         public LiquidQuoineClient(LiquidQuoineClientOptions options) : base("Liquid", options, options.ApiCredentials == null ? null : new LiquidQuoineAuthenticationProvider(options.ApiCredentials))
         {
-            log.Level = CryptoExchange.Net.Logging.LogVerbosity.Debug;
+            log.Level = LogLevel.Debug;
         }
         /// <summary>
         /// Sets the default options to use for new clients
@@ -98,12 +99,12 @@ namespace LiquidQuoine.Net
 
         #region Basic methods
  
-        protected override IRequest ConstructRequest(Uri uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, PostParameters postPosition, ArrayParametersSerialization arraySerialization, int requestId)
+        protected override IRequest ConstructRequest(Uri uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, HttpMethodParameterPosition parametersPosition, ArrayParametersSerialization arraySerialization, int requestId, Dictionary<string, string> additionalHeders)
         {
             if (parameters == null)
                 parameters = new Dictionary<string, object>();
             var uriString = uri.ToString();
-            if ((method == HttpMethod.Get || method == HttpMethod.Delete || postParametersPosition == PostParameters.InUri) && parameters?.Any() == true)
+            if ((method == HttpMethod.Get || method == HttpMethod.Delete || parametersPosition == HttpMethodParameterPosition.InUri) && parameters?.Any() == true)
             {
                 uriString += "?" + parameters.CreateParamString(true, ArrayParametersSerialization.MultipleValues);
             }
@@ -114,11 +115,16 @@ namespace LiquidQuoine.Net
 
             var headers = new Dictionary<string, string>();
             if (authProvider != null)
-                headers = authProvider.AddAuthenticationToHeaders(new Uri(uriString).PathAndQuery, method, null, signed,postPosition,arraySerialization);
+                headers = authProvider.AddAuthenticationToHeaders(new Uri(uriString).PathAndQuery, method, null, signed, parametersPosition, arraySerialization);
+
+            foreach (var h in additionalHeders)
+            {
+                headers[h.Key] = h.Value;
+            }
 
             foreach (var header in headers)
                 request.AddHeader(header.Key, header.Value);
-            if ((method == HttpMethod.Post || method == HttpMethod.Put) && postParametersPosition != PostParameters.InUri)
+            if ((method == HttpMethod.Post || method == HttpMethod.Put) && parametersPosition != HttpMethodParameterPosition.InUri)
             {
                 WriteParamBody(request, parameters, Constants.JsonContentHeader);
             }
@@ -159,7 +165,7 @@ namespace LiquidQuoine.Net
         public async Task<CallResult<List<LiquidQuoineProduct>>> GetAllProductsAsync(CancellationToken ct = default)
         {
 
-            var result = await SendRequest<List<LiquidQuoineProduct>>(GetUrl(GetAllProductsEndpoint), HttpMethod.Get, ct, null, false).ConfigureAwait(false);
+            var result = await SendRequestAsync<List<LiquidQuoineProduct>>(GetUrl(GetAllProductsEndpoint), HttpMethod.Get, ct, null, false).ConfigureAwait(false);
             return new CallResult<List<LiquidQuoineProduct>>(result.Data, result.Error);
         }
         /// <summary>
@@ -175,7 +181,7 @@ namespace LiquidQuoine.Net
         /// <returns></returns>
         public async Task<CallResult<LiquidQuoineProduct>> GetProductAsync(int id, CancellationToken ct = default)
         {
-            var result = await SendRequest<LiquidQuoineProduct>(GetUrl(FillPathParameter(GetProductEndpoint, id.ToString())), HttpMethod.Get, ct).ConfigureAwait(false);
+            var result = await SendRequestAsync<LiquidQuoineProduct>(GetUrl(FillPathParameter(GetProductEndpoint, id.ToString())), HttpMethod.Get, ct).ConfigureAwait(false);
             return new CallResult<LiquidQuoineProduct>(result.Data, result.Error);
         }
         /// <summary>
@@ -196,7 +202,7 @@ namespace LiquidQuoine.Net
             var parameters = new Dictionary<string, object>();
             if (fullOrderbook)
                 parameters.Add("full", 1);
-            var result = await SendRequest<LiquidQuoineOrderBook>(GetUrl(FillPathParameter(GetOrderBookEndpoint, id.ToString())), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
+            var result = await SendRequestAsync<LiquidQuoineOrderBook>(GetUrl(FillPathParameter(GetOrderBookEndpoint, id.ToString())), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
             return new CallResult<LiquidQuoineOrderBook>(result.Data, result.Error);
         }
         /// <summary>
@@ -222,7 +228,7 @@ namespace LiquidQuoine.Net
             if (limit > 1000 || limit < 1)
                 return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(null, new ServerError("Limit should be between 1 and 1000"));
 
-            var result = await SendRequest<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(GetUrl(GetExecutionsEndpoint), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
+            var result = await SendRequestAsync<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(GetUrl(GetExecutionsEndpoint), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
             return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(result.Data, result.Error);
         }
         /// <summary>
@@ -249,7 +255,7 @@ namespace LiquidQuoine.Net
             parameters.AddOptionalParameter("limit", limit);
             if (limit > 1000 || limit < 1)
                 return new CallResult<List<LiquidQuoineExecution>>(null, new ServerError("Limit should be between 1 and 1000"));
-            var result = await SendRequest<List<LiquidQuoineExecution>>(GetUrl(GetExecutionsEndpoint), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
+            var result = await SendRequestAsync<List<LiquidQuoineExecution>>(GetUrl(GetExecutionsEndpoint), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
             return new CallResult<List<LiquidQuoineExecution>>(result.Data, result.Error);
         }
         /// <summary>
@@ -265,7 +271,7 @@ namespace LiquidQuoine.Net
         /// <returns></returns>
         public async Task<CallResult<LiquidQuoineInterestRate>> GetInterestRatesAsync(string currency, CancellationToken ct = default)
         {
-            var result = await SendRequest<LiquidQuoineInterestRate>(GetUrl(FillPathParameter(GetInterestRatesEndpoint, currency)), HttpMethod.Get, ct).ConfigureAwait(false);
+            var result = await SendRequestAsync<LiquidQuoineInterestRate>(GetUrl(FillPathParameter(GetInterestRatesEndpoint, currency)), HttpMethod.Get, ct).ConfigureAwait(false);
             return new CallResult<LiquidQuoineInterestRate>(result.Data, result.Error);
         }
         /// <summary>
@@ -313,7 +319,7 @@ namespace LiquidQuoine.Net
             var order = new Dictionary<string, object>() { { "order", parameters } };
             var test = JsonConvert.SerializeObject(order);
             Console.WriteLine(test);
-            var result = await SendRequest<LiquidQuoinePlacedOrder>(GetUrl(PlaceOrderEndpoint), HttpMethod.Post, ct, order, true).ConfigureAwait(false);
+            var result = await SendRequestAsync<LiquidQuoinePlacedOrder>(GetUrl(PlaceOrderEndpoint), HttpMethod.Post, ct, order, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
         }
         /// <summary>
@@ -363,7 +369,7 @@ namespace LiquidQuoine.Net
             parameters.AddOptionalParameter("order_direction", orderDirection);
             var order = new Dictionary<string, object>() { { "order", parameters } };
 
-            var result = await SendRequest<LiquidQuoinePlacedOrder>(GetUrl(PlaceOrderEndpoint), HttpMethod.Post, ct, order, true).ConfigureAwait(false);
+            var result = await SendRequestAsync<LiquidQuoinePlacedOrder>(GetUrl(PlaceOrderEndpoint), HttpMethod.Post, ct, order, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
 
         }
@@ -380,7 +386,7 @@ namespace LiquidQuoine.Net
         /// <returns></returns>
         public async Task<CallResult<LiquidQuoinePlacedOrder>> GetOrderAsync(long orderId, CancellationToken ct = default)
         {
-            var result = await SendRequest<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(GetOrderEndpoint, orderId.ToString())), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
+            var result = await SendRequestAsync<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(GetOrderEndpoint, orderId.ToString())), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
         }
         /// <summary>
@@ -396,7 +402,7 @@ namespace LiquidQuoine.Net
         /// <returns></returns>
         public async Task<CallResult<LiquidQuoinePlacedOrder>> CancelOrderAsync(long orderId, CancellationToken ct = default)
         {
-            var result = await SendRequest<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(CancelOrderEndpoint, orderId.ToString())), HttpMethod.Put, ct, null, true).ConfigureAwait(false);
+            var result = await SendRequestAsync<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(CancelOrderEndpoint, orderId.ToString())), HttpMethod.Put, ct, null, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
         }
         /// <summary>
@@ -420,7 +426,7 @@ namespace LiquidQuoine.Net
             parameters.Add("quantity", quantity);
             parameters.Add("price", price);
 
-            var result = await SendRequest<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(EditOrderEndpoint, orderId.ToString())), HttpMethod.Put, ct, parameters, true).ConfigureAwait(false);
+            var result = await SendRequestAsync<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(EditOrderEndpoint, orderId.ToString())), HttpMethod.Put, ct, parameters, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoinePlacedOrder>(result.Data, result.Error);
         }
         /// <summary>
@@ -436,7 +442,7 @@ namespace LiquidQuoine.Net
         /// <returns></returns>
         public async Task<CallResult<List<LiquidQuoineOrderTrade>>> GetOrderTradesAsync(long orderId, CancellationToken ct = default)
         {
-            var result = await SendRequest<List<LiquidQuoineOrderTrade>>(GetUrl(FillPathParameter(GetOrderTradesEndpoint, orderId.ToString())), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
+            var result = await SendRequestAsync<List<LiquidQuoineOrderTrade>>(GetUrl(FillPathParameter(GetOrderTradesEndpoint, orderId.ToString())), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
             return new CallResult<List<LiquidQuoineOrderTrade>>(result.Data, result.Error);
         }
         ///// <summary>
@@ -479,7 +485,7 @@ namespace LiquidQuoine.Net
             parameters.Add("product_id", productId);
             parameters.AddOptionalParameter("limit", limit);
             parameters.AddOptionalParameter("page", page);
-            var result = await SendRequest<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(GetUrl(GetMyExecutionsEndpoint), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
+            var result = await SendRequestAsync<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(GetUrl(GetMyExecutionsEndpoint), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>(result.Data, result.Error);
         }
 
@@ -494,7 +500,7 @@ namespace LiquidQuoine.Net
         /// <returns></returns>
         public async Task<CallResult<List<LiquidQuoineFiatAccount>>> GetFiatAccountsBalancesAsync(CancellationToken ct = default)
         {
-            var result = await SendRequest<List<LiquidQuoineFiatAccount>>(GetUrl(GetFiatAccountsEndpoint), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
+            var result = await SendRequestAsync<List<LiquidQuoineFiatAccount>>(GetUrl(GetFiatAccountsEndpoint), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
             return new CallResult<List<LiquidQuoineFiatAccount>>(result.Data, result.Error);
         }
 
@@ -509,7 +515,7 @@ namespace LiquidQuoine.Net
         /// <returns></returns>
         public async Task<CallResult<List<LiquidQuoineCryptoAccount>>> GetCryptoAccountsBalancesAsync(CancellationToken ct = default)
         {
-            var result = await SendRequest<List<LiquidQuoineCryptoAccount>>(GetUrl(GetCryptoAccountsEndpoint), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
+            var result = await SendRequestAsync<List<LiquidQuoineCryptoAccount>>(GetUrl(GetCryptoAccountsEndpoint), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
             return new CallResult<List<LiquidQuoineCryptoAccount>>(result.Data, result.Error);
         }
 
@@ -524,7 +530,7 @@ namespace LiquidQuoine.Net
         /// <returns></returns>
         public async Task<CallResult<List<LiquidQouineAccountBalance>>> GetAccountsBalancesAsync(CancellationToken ct = default)
         {
-            var result = await SendRequest<List<LiquidQouineAccountBalance>>(GetUrl(GetAllAccountsBalancesEndpoint), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
+            var result = await SendRequestAsync<List<LiquidQouineAccountBalance>>(GetUrl(GetAllAccountsBalancesEndpoint), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
             return new CallResult<List<LiquidQouineAccountBalance>>(result.Data, result.Error);
         }
 
@@ -546,7 +552,7 @@ namespace LiquidQuoine.Net
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("closed_quantity", quantity);
 
-            var result = await SendRequest<LiquidQuoineOrderTrade>(GetUrl(FillPathParameter(CloseTradeEndpoint, tradeId.ToString())), HttpMethod.Put, ct, parameters, true).ConfigureAwait(false);
+            var result = await SendRequestAsync<LiquidQuoineOrderTrade>(GetUrl(FillPathParameter(CloseTradeEndpoint, tradeId.ToString())), HttpMethod.Put, ct, parameters, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoineOrderTrade>(result.Data, result.Error);
         }
 
@@ -569,7 +575,7 @@ namespace LiquidQuoine.Net
             }
             if (withDetails)
                 parameters.AddParameter("with_details", 1);
-            var result = await SendRequest<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>(GetUrl(GetOrdersEndpoint), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
+            var result = await SendRequestAsync<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>(GetUrl(GetOrdersEndpoint), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
             return new CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>(result.Data, result.Error);
         }
 
@@ -577,7 +583,7 @@ namespace LiquidQuoine.Net
 
         public async Task<CallResult<LiquidQouineAccountCurrencyBalance>> GetAccountBalanceAsync(string currency, CancellationToken ct = default)
         {
-            var result = await SendRequest<LiquidQouineAccountCurrencyBalance>(GetUrl(FillPathParameter(GetAccountBalanceEndpoint, currency)), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
+            var result = await SendRequestAsync<LiquidQouineAccountCurrencyBalance>(GetUrl(FillPathParameter(GetAccountBalanceEndpoint, currency)), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
             return new CallResult<LiquidQouineAccountCurrencyBalance>(result.Data, result.Error);
         }
 
