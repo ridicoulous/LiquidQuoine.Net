@@ -1,4 +1,5 @@
 ﻿using CryptoExchange.Net.Converters;
+using CryptoExchange.Net.ExchangeInterfaces;
 using LiquidQuoine.Net.Converters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -6,7 +7,7 @@ using System;
 
 namespace LiquidQuoine.Net.Objects
 {
-    public class LiquidQuoineOrderTrade
+    public class LiquidQuoineOrderTrade : ICommonTrade
     {
         [JsonProperty("id")]
         public long Id { get; set; }
@@ -15,7 +16,7 @@ namespace LiquidQuoine.Net.Objects
         public DateTime CreatedAt { get; set; }
 
         [JsonProperty("updated_at"), JsonConverter(typeof(OrderTradeDateTimeConverter))]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         [JsonProperty("currency_pair_code")]
         public string CurrencyPairCode { get; set; }
@@ -81,5 +82,17 @@ namespace LiquidQuoine.Net.Objects
 
         [JsonProperty("daily_interest"), JsonConverter(typeof(StringToDecimalConverter))]
         public decimal DailyInterest { get; set; }
+
+        public string CommonId => Id.ToString();
+
+        public decimal CommonPrice => Status == MaringOrderStatus.Open ? OpenPrice : ClosePrice;
+
+        public decimal CommonQuantity => Quantity;
+
+        public decimal CommonFee => CloseFee;
+
+        public string CommonFeeAsset => FundingCurrency;
+
+        public DateTime CommonTradeTime => UpdatedAt ?? CreatedAt;
     }
 }

@@ -15,7 +15,7 @@ namespace LiquidQuoine.Net.Objects
         public DateTime CreatedAt { get; set; }
 
         [JsonProperty("updated_at"), JsonConverter(typeof(TimestampSecondsConverter))]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
     }
     public class LiquidQuoineDefaultResponse<T> where T : LiquidQuoineBase
