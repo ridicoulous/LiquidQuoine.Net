@@ -1,10 +1,11 @@
-﻿using LiquidQuoine.Net.Converters;
+﻿using CryptoExchange.Net.ExchangeInterfaces;
+using LiquidQuoine.Net.Converters;
 using Newtonsoft.Json;
 
 namespace LiquidQuoine.Net.Objects
 {
 
-    public partial class LiquidQuoineProduct
+    public partial class LiquidQuoineProduct : ICommonSymbol, ICommonTicker
     {
         [JsonProperty("id")]
         public int Id { get; set; }
@@ -77,5 +78,17 @@ namespace LiquidQuoine.Net.Objects
 
         [JsonProperty("disabled")]
         public bool IsDisabled { get; set; }
+
+        public string CommonName => CurrencyPairCode;
+
+        public decimal CommonMinimumTradeSize => 0m;
+
+        public string CommonSymbol => CurrencyPairCode;
+
+        public decimal CommonHigh => HighMarketAsk;
+
+        public decimal CommonLow => LowMarketBid;
+
+        public decimal CommonVolume => Volume24H;
     }
 }

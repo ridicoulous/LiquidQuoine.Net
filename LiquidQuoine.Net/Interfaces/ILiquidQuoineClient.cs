@@ -1,4 +1,5 @@
-﻿using CryptoExchange.Net.Interfaces;
+﻿using CryptoExchange.Net.ExchangeInterfaces;
+using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using LiquidQuoine.Net.Objects;
 using System;
@@ -32,30 +33,30 @@ namespace LiquidQuoine.Net.Interfaces
         /// </summary>
         void RemoveRateLimiters();
 
-        CallResult<LiquidQouineAccountCurrencyBalance> GetAccountBalance(string currency);
-        Task<CallResult<LiquidQouineAccountCurrencyBalance>> GetAccountBalanceAsync(string currency, CancellationToken ct = default);
+        WebCallResult<LiquidQouineAccountCurrencyBalance> GetAccountBalance(string currency);
+        Task<WebCallResult<LiquidQouineAccountCurrencyBalance>> GetAccountBalanceAsync(string currency, CancellationToken ct = default);
 
 
         /// <summary>
         /// Get the list of all available products.
         /// </summary>
         /// <returns></returns>
-        CallResult<List<LiquidQuoineProduct>> GetAllProducts();
+        WebCallResult<List<LiquidQuoineProduct>> GetAllProducts();
         /// <summary>
         /// Get the list of all available products.
         /// </summary>
         /// <returns></returns>
-        Task<CallResult<List<LiquidQuoineProduct>>> GetAllProductsAsync(CancellationToken ct = default);
+        Task<WebCallResult<List<LiquidQuoineProduct>>> GetAllProductsAsync(CancellationToken ct = default);
         /// <summary>
         /// Get product by id
         /// </summary>
         /// <returns></returns>
-        CallResult<LiquidQuoineProduct> GetProduct(int id);
+        WebCallResult<LiquidQuoineProduct> GetProduct(int id);
         /// <summary>
         /// Get product by id
         /// </summary>
         /// <returns></returns>
-        Task<CallResult<LiquidQuoineProduct>> GetProductAsync(int id, CancellationToken ct = default);
+        Task<WebCallResult<LiquidQuoineProduct>> GetProductAsync(int id, CancellationToken ct = default);
 
         /// <summary>
         /// Get Order Book
@@ -63,14 +64,14 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="id">Product ID</param>
         /// <param name="full">Set true to get all price levels (default is 20 each side)</param>
         /// <returns>LiquidQuoineOrderBook</returns>
-        CallResult<LiquidQuoineOrderBook> GetOrderBook(int id, bool full);
+        WebCallResult<LiquidQuoineOrderBook> GetOrderBook(int id, bool full);
         /// <summary>
         /// Get Order Book
         /// </summary>
         /// <param name="id">Product ID</param>
         /// <param name="full">Set true to get all price levels (default is 20 each side)</param>
         /// <returns>LiquidQuoineOrderBook</returns>
-        Task<CallResult<LiquidQuoineOrderBook>> GetOrderBookAsync(int id, bool full, CancellationToken ct = default);
+        Task<WebCallResult<LiquidQuoineOrderBook>> GetOrderBookAsync(int id, bool full, CancellationToken ct = default);
 
         /// <summary>
         /// Get a list of recent executions from a product (Executions are sorted in DESCENDING order - Latest first)
@@ -79,7 +80,7 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="limit">How many executions should be returned. Must be <= 1000. Default is 20</param>
         /// <param name="page">Page number from all results</param>
         /// <returns></returns>
-        CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetExecutions(int id, int? limit = null, int? page = null);
+        WebCallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetExecutions(int id, int? limit = null, int? page = null);
         /// <summary>
         /// Get a list of recent executions from a product (Executions are sorted in DESCENDING order - Latest first)
         /// </summary>
@@ -87,7 +88,7 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="limit">How many executions should be returned. Must be <= 1000. Default is 20</param>
         /// <param name="page">Page number from all results</param>
         /// <returns></returns>
-        Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetExecutionsAsync(int id, int? limit=null, int? page=null, CancellationToken ct = default);
+        Task<WebCallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetExecutionsAsync(int id, int? limit=null, int? page=null, CancellationToken ct = default);
 
         /// <summary>
         /// Get a list of executions after a particular time (Executions are sorted in ASCENDING order)
@@ -96,7 +97,7 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="dateFrom">Only show executions at or after this timestamp (Unix timestamps in seconds)</param>
         /// <param name="limit">How many executions should be returned. Must be <= 1000. Default is 20</param>
         /// <returns></returns>
-        CallResult<List<LiquidQuoineExecution>> GetExecutions(int productId, DateTime dateFrom, int? limit = null);
+        WebCallResult<List<LiquidQuoineExecution>> GetExecutions(int productId, DateTime dateFrom, int? limit = null);
         /// <summary>
         /// Get a list of executions after a particular time (Executions are sorted in ASCENDING order)
         /// </summary>
@@ -104,20 +105,20 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="dateFrom">Only show executions at or after this timestamp (Unix timestamps in seconds)</param>
         /// <param name="limit">How many executions should be returned. Must be <= 1000. Default is 20</param>
         /// <returns></returns>
-        Task<CallResult<List<LiquidQuoineExecution>>> GetExecutionsAsync(int productId, DateTime dateFrom, int? limit = null, CancellationToken ct = default);
+        Task<WebCallResult<List<LiquidQuoineExecution>>> GetExecutionsAsync(int productId, DateTime dateFrom, int? limit = null, CancellationToken ct = default);
 
         /// <summary>
         /// Interest Rates Get Interest Rate Ladder for a currency
         /// </summary>
         /// <param name="currency">currency</param>
         /// <returns></returns>
-        CallResult<LiquidQuoineInterestRate> GetInterestRates(string currency);
+        WebCallResult<LiquidQuoineInterestRate> GetInterestRates(string currency);
         /// <summary>
         /// Interest Rates Get Interest Rate Ladder for a currency
         /// </summary>
         /// <param name="currency">currency</param>
         /// <returns></returns>
-        Task<CallResult<LiquidQuoineInterestRate>> GetInterestRatesAsync(string currency, CancellationToken ct = default);
+        Task<WebCallResult<LiquidQuoineInterestRate>> GetInterestRatesAsync(string currency, CancellationToken ct = default);
         /// <summary>
         /// Create an Order
         /// </summary>
@@ -128,7 +129,7 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="price">price per unit of cryptocurrency</param>
         /// <param name="priceRange">For order_type of market_with_range only, slippage of the order. Use for TrailingStops</param>
         /// <returns></returns>
-        CallResult<LiquidQuoinePlacedOrder> PlaceOrder(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal? price = null, decimal? priceRange = null);
+        WebCallResult<LiquidQuoinePlacedOrder> PlaceOrder(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal? price = null, decimal? priceRange = null);
         /// <summary>
         /// Create an Order
         /// </summary>
@@ -139,7 +140,7 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="price">price per unit of cryptocurrency</param>
         /// <param name="priceRange">For order_type of market_with_range only, slippage of the order. Use for TrailingStops</param>
         /// <returns></returns>
-        Task<CallResult<LiquidQuoinePlacedOrder>> PlaceOrderAsync(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal? price = null, decimal? priceRange=null, CancellationToken ct = default);
+        Task<WebCallResult<LiquidQuoinePlacedOrder>> PlaceOrderAsync(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal? price = null, decimal? priceRange=null, CancellationToken ct = default);
         /// <summary>
         /// Use it to place margin order
         /// </summary>
@@ -153,7 +154,7 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="priceRange"></param>
         /// <param name="orderDirection">one_direction, two_direction or netout.</param>
         /// <returns></returns>
-        CallResult<LiquidQuoinePlacedOrder> PlaceMarginOrder(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null,OrderDirection? orderDirection = null);
+        WebCallResult<LiquidQuoinePlacedOrder> PlaceMarginOrder(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null,OrderDirection? orderDirection = null);
         /// <summary>
         /// Use it to place margin order
         /// </summary>
@@ -167,31 +168,31 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="priceRange"></param>
         /// <param name="orderDirection">one_direction, two_direction or netout.</param>
         /// <returns></returns>
-        Task<CallResult<LiquidQuoinePlacedOrder>> PlaceMarginOrderAsync(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency,  decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection = null, CancellationToken ct = default);
+        Task<WebCallResult<LiquidQuoinePlacedOrder>> PlaceMarginOrderAsync(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency,  decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection = null, CancellationToken ct = default);
         /// <summary>
         /// Get placed order
         /// </summary>
         /// <param name="orderId">order id</param>
         /// <returns></returns>
-        CallResult<LiquidQuoinePlacedOrder> GetOrder(long orderId);
+        WebCallResult<LiquidQuoinePlacedOrder> GetOrder(long orderId);
         /// <summary>
         /// Get placed order
         /// </summary>
         /// <param name="orderId">order id</param>
         /// <returns></returns>
-        Task<CallResult<LiquidQuoinePlacedOrder>> GetOrderAsync(long orderId, CancellationToken ct = default);
+        Task<WebCallResult<LiquidQuoinePlacedOrder>> GetOrderAsync(long orderId, CancellationToken ct = default);
         /// <summary>
         /// Cancel placed order
         /// </summary>
         /// <param name="orderId">order id</param>
         /// <returns></returns>
-        CallResult<LiquidQuoinePlacedOrder> CancelOrder(long orderId);
+        WebCallResult<LiquidQuoinePlacedOrder> CancelOrder(long orderId);
         /// <summary>
         /// Cancel placed order
         /// </summary>
         /// <param name="orderId">order id</param>
         /// <returns></returns>
-        Task<CallResult<LiquidQuoinePlacedOrder>> CancelOrderAsync(long orderId, CancellationToken ct = default);
+        Task<WebCallResult<LiquidQuoinePlacedOrder>> CancelOrderAsync(long orderId, CancellationToken ct = default);
         /// <summary>
         /// Edit placed order
         /// </summary>
@@ -199,7 +200,7 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="quantity">new order quantity</param>
         /// <param name="price">new order price</param>        
         /// <returns></returns>
-        CallResult<LiquidQuoinePlacedOrder> EditOrder(long orderId,decimal quantity, decimal price);
+        WebCallResult<LiquidQuoinePlacedOrder> EditOrder(long orderId,decimal quantity, decimal price);
         /// <summary>
         /// Edit placed order
         /// </summary>
@@ -207,19 +208,19 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="quantity">new order quantity</param>
         /// <param name="price">new order price</param>        
         /// <returns></returns>
-        Task<CallResult<LiquidQuoinePlacedOrder>> EditOrderAsync(long orderId, decimal quantity, decimal price, CancellationToken ct = default);
+        Task<WebCallResult<LiquidQuoinePlacedOrder>> EditOrderAsync(long orderId, decimal quantity, decimal price, CancellationToken ct = default);
         /// <summary>
         /// Get an order's trades
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        CallResult<List<LiquidQuoineOrderTrade>> GetOrderTrades(long orderId);
+        WebCallResult<List<LiquidQuoineOrderTrade>> GetOrderTrades(long orderId);
         /// <summary>
         /// Get an order's trades
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        Task<CallResult<List<LiquidQuoineOrderTrade>>> GetOrderTradesAsync(long orderId, CancellationToken ct = default);
+        Task<WebCallResult<List<LiquidQuoineOrderTrade>>> GetOrderTradesAsync(long orderId, CancellationToken ct = default);
 //looks like it is removed from documentation
         ///// <summary>
         ///// Get an Order’s Executions
@@ -228,7 +229,7 @@ namespace LiquidQuoine.Net.Interfaces
         ///// <param name="limit">Limit executions per request</param>
         ///// <param name="page">Page number of results</param>
         ///// <returns></returns>
-        //CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetOrderExecutions(long orderId, int? limit = null, int? page = null);
+        //WebCallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetOrderExecutions(long orderId, int? limit = null, int? page = null);
         ///// <summary>
         ///// Get an Order’s Executions
         ///// </summary>
@@ -236,13 +237,13 @@ namespace LiquidQuoine.Net.Interfaces
         ///// <param name="limit">Limit executions per request</param>
         ///// <param name="page">Page number of results</param>
         ///// <returns></returns>
-        //Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetOrderExecutionsAsync(long orderId, int? limit=null, int? page = null);
+        //Task<WebCallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetOrderExecutionsAsync(long orderId, int? limit=null, int? page = null);
         /// <summary>
         /// Get Your Executions by product id
         /// </summary>
         /// <param name="productId">Product id</param>   
         /// <returns></returns>
-        CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetMyExecutions(int productId, int? limit = null, int? page = null);
+        WebCallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>> GetMyExecutions(int productId, int? limit = null, int? page = null);
         /// <summary>
         ///  Get Your Executions by product id
         /// </summary>
@@ -250,13 +251,13 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="limit">limit of count of executions</param>
         /// <param name="page">page of list of pages of executions</param>
         /// <returns></returns>
-        Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetMyExecutionsAsync(int productId, int?limit=null, int?page=null, CancellationToken ct = default);
+        Task<WebCallResult<LiquidQuoineDefaultResponse<LiquidQuoineExecution>>> GetMyExecutionsAsync(int productId, int?limit=null, int?page=null, CancellationToken ct = default);
 
 
 
-        CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>> GetOrders(string fundingCurrency=null, int? productId=null, OrderStatus? status=null, bool withDetails= false, int limit = 1000, int page = 1);
+        WebCallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>> GetOrders(string fundingCurrency=null, int? productId=null, OrderStatus? status=null, bool withDetails= false, int limit = 1000, int page = 1);
 
-        Task<CallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>> GetOrdersAsync(string fundingCurrency = null, int? productId = null, OrderStatus? status = null, bool withDetails = false, int limit = 1000, int page = 1, CancellationToken ct = default);
+        Task<WebCallResult<LiquidQuoineDefaultResponse<LiquidQuoinePlacedOrder>>> GetOrdersAsync(string fundingCurrency = null, int? productId = null, OrderStatus? status = null, bool withDetails = false, int limit = 1000, int page = 1, CancellationToken ct = default);
 
        
 

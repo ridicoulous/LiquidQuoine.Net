@@ -1,15 +1,21 @@
-﻿using LiquidQuoine.Net.Converters;
+﻿using CryptoExchange.Net.ExchangeInterfaces;
+using LiquidQuoine.Net.Converters;
 using Newtonsoft.Json;
 
 namespace LiquidQuoine.Net.Objects
 {
-    public class LiquidQouineAccountBalance
+    public class LiquidQouineAccountBalance : ICommonBalance
     {
         [JsonProperty("currency")]
         public string Currency { get; set; }
         [JsonProperty("balance"),  JsonConverter(typeof(StringToDecimalConverter))]
         public decimal Balance { get; set; }
 
+        public string CommonAsset => Currency;
+
+        public decimal CommonAvailable => throw new System.NotImplementedException();
+
+        public decimal CommonTotal => Balance;
     }
     public class LiquidQouineAccountCurrencyBalance
     {

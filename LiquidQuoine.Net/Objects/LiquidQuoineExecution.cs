@@ -1,11 +1,12 @@
 ﻿using CryptoExchange.Net.Converters;
+using CryptoExchange.Net.ExchangeInterfaces;
 using LiquidQuoine.Net.Converters;
 using Newtonsoft.Json;
 using System;
 
 namespace LiquidQuoine.Net.Objects
 {
-    public class LiquidQuoineExecution : LiquidQuoineBase
+    public class LiquidQuoineExecution : LiquidQuoineBase, ICommonRecentTrade
     {
         [JsonProperty("quantity"),JsonConverter(typeof(StringToDecimalConverter))]
         public decimal Quantity { get; set; }
@@ -21,5 +22,11 @@ namespace LiquidQuoine.Net.Objects
         public string Target { get; set; }
         [JsonProperty("pnl")]
         public string Pnl { get; set; }
+
+        public decimal CommonPrice => Price;
+
+        public decimal CommonQuantity => Quantity;
+
+        public DateTime CommonTradeTime => CreatedAt;
     }
 }
