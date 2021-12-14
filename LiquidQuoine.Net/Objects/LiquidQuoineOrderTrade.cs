@@ -16,7 +16,7 @@ namespace LiquidQuoine.Net.Objects
         public DateTime CreatedAt { get; set; }
 
         [JsonProperty("updated_at"), JsonConverter(typeof(OrderTradeDateTimeConverter))]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         [JsonProperty("currency_pair_code")]
         public string CurrencyPairCode { get; set; }
@@ -85,7 +85,6 @@ namespace LiquidQuoine.Net.Objects
 
         public string CommonId => Id.ToString();
 
-        // TODO: check it!
         public decimal CommonPrice => Status == MaringOrderStatus.Open ? OpenPrice : ClosePrice;
 
         public decimal CommonQuantity => Quantity;
@@ -94,7 +93,6 @@ namespace LiquidQuoine.Net.Objects
 
         public string CommonFeeAsset => FundingCurrency;
 
-        // TODO: check it!
-        public DateTime CommonTradeTime => CreatedAt;
+        public DateTime CommonTradeTime => UpdatedAt ?? CreatedAt;
     }
 }
