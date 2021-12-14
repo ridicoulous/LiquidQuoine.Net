@@ -128,8 +128,12 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="quantity">quantity to buy or sell</param>
         /// <param name="price">price per unit of cryptocurrency</param>
         /// <param name="priceRange">For order_type of market_with_range only, slippage of the order. Use for TrailingStops</param>
+        /// <param name="clientOrderId">A self-identified Order ID, 
+        ///                             a custom unique identifying JSON string up to 36 bytes with any content (as long as it is unique). 
+        ///                             User must avoid special characters besides "-".
+        ///                             client_order_id must always be unique and not be reused.</param>
         /// <returns></returns>
-        WebCallResult<LiquidQuoinePlacedOrder> PlaceOrder(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal? price = null, decimal? priceRange = null);
+        WebCallResult<LiquidQuoinePlacedOrder> PlaceOrder(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal? price = null, decimal? priceRange = null, string clientOrderId = null);
         /// <summary>
         /// Create an Order
         /// </summary>
@@ -139,36 +143,48 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="quantity">quantity to buy or sell</param>
         /// <param name="price">price per unit of cryptocurrency</param>
         /// <param name="priceRange">For order_type of market_with_range only, slippage of the order. Use for TrailingStops</param>
+        /// <param name="clientOrderId">A self-identified Order ID, 
+        ///                             a custom unique identifying JSON string up to 36 bytes with any content (as long as it is unique). 
+        ///                             User must avoid special characters besides "-".
+        ///                             client_order_id must always be unique and not be reused.</param>
         /// <returns></returns>
-        Task<WebCallResult<LiquidQuoinePlacedOrder>> PlaceOrderAsync(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal? price = null, decimal? priceRange=null, CancellationToken ct = default);
+        Task<WebCallResult<LiquidQuoinePlacedOrder>> PlaceOrderAsync(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal? price = null, decimal? priceRange=null, string clientOrderId = null, CancellationToken ct = default);
         /// <summary>
         /// Use it to place margin order
         /// </summary>
-        /// <param name="productId"></param>
-        /// <param name="orderSide"></param>
-        /// <param name="orderType"></param>
+        /// <param name="productId">product id</param>
+        /// <param name="orderSide">order side</param>
+        /// <param name="orderType">order type</param>
         /// <param name="leverageLevel">Valid levels: 2,4,5,10,25</param>
         /// <param name="fundingCurrency">Currency used to fund the trade with. Default is quoted currency (e.g a trade in BTCUSD product will use USD as the funding currency as default)</param>
         /// <param name="quantity"></param>
         /// <param name="price"></param>
-        /// <param name="priceRange"></param>
+        /// <param name="priceRange">use it to place TrailingStop order</param>
         /// <param name="orderDirection">one_direction, two_direction or netout.</param>
+        /// <param name="clientOrderId">A self-identified Order ID, 
+        ///                             a custom unique identifying JSON string up to 36 bytes with any content (as long as it is unique). 
+        ///                             User must avoid special characters besides "-".
+        ///                             client_order_id must always be unique and not be reused.</param>
         /// <returns></returns>
-        WebCallResult<LiquidQuoinePlacedOrder> PlaceMarginOrder(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null,OrderDirection? orderDirection = null);
+        WebCallResult<LiquidQuoinePlacedOrder> PlaceMarginOrder(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null,OrderDirection? orderDirection = null, string clientOrderId = null);
         /// <summary>
         /// Use it to place margin order
         /// </summary>
-        /// <param name="productId"></param>
-        /// <param name="orderSide"></param>
-        /// <param name="orderType"></param>
+        /// <param name="productId">product id</param>
+        /// <param name="orderSide">order side</param>
+        /// <param name="orderType">order type</param>
         /// <param name="leverageLevel">Valid levels: 2,4,5,10,25</param>
         /// <param name="fundingCurrency">Currency used to fund the trade with. Default is quoted currency (e.g a trade in BTCUSD product will use USD as the funding currency as default)</param>
         /// <param name="quantity"></param>
         /// <param name="price"></param>
-        /// <param name="priceRange"></param>
+        /// <param name="priceRange">use it to place TrailingStop order</param>
         /// <param name="orderDirection">one_direction, two_direction or netout.</param>
+        /// <param name="clientOrderId">A self-identified Order ID, 
+        ///                             a custom unique identifying JSON string up to 36 bytes with any content (as long as it is unique). 
+        ///                             User must avoid special characters besides "-".
+        ///                             client_order_id must always be unique and not be reused.</param>
         /// <returns></returns>
-        Task<WebCallResult<LiquidQuoinePlacedOrder>> PlaceMarginOrderAsync(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency,  decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection = null, CancellationToken ct = default);
+        Task<WebCallResult<LiquidQuoinePlacedOrder>> PlaceMarginOrderAsync(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency,  decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection = null, string clientOrderId = null, CancellationToken ct = default);
         /// <summary>
         /// Get placed order
         /// </summary>
@@ -182,6 +198,18 @@ namespace LiquidQuoine.Net.Interfaces
         /// <returns></returns>
         Task<WebCallResult<LiquidQuoinePlacedOrder>> GetOrderAsync(long orderId, CancellationToken ct = default);
         /// <summary>
+        /// Get placed order
+        /// </summary>
+        /// <param name="clientOrderId">client order id</param>
+        /// <returns></returns>
+        WebCallResult<LiquidQuoinePlacedOrder> GetOrderByClientOrderId(string clientOrderId);
+        /// <summary>
+        /// Get placed order
+        /// </summary>
+        /// <param name="orderId">client order id</param>
+        /// <returns></returns>
+        Task<WebCallResult<LiquidQuoinePlacedOrder>> GetOrderByClientOrderIdAsync(string clientOrderId, CancellationToken ct = default);
+        /// <summary>
         /// Cancel placed order
         /// </summary>
         /// <param name="orderId">order id</param>
@@ -193,6 +221,34 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="orderId">order id</param>
         /// <returns></returns>
         Task<WebCallResult<LiquidQuoinePlacedOrder>> CancelOrderAsync(long orderId, CancellationToken ct = default);
+        /// <summary>
+        /// Cancel placed order
+        /// </summary>
+        /// <param name="orderId">client order id</param>
+        /// <returns></returns>
+        WebCallResult<LiquidQuoinePlacedOrder> CancelOrderByClientOrderId(string clientOrderId);
+        /// <summary>
+        /// Cancel placed order
+        /// </summary>
+        /// <param name="orderId">client order id</param>
+        /// <returns></returns>
+        Task<WebCallResult<LiquidQuoinePlacedOrder>> CancelOrderByClientOrderIdAsync(string clientOrderId, CancellationToken ct = default);
+        /// <summary>
+        /// Cancel all open orders in bulk.
+        /// Below are optional body parameters, not specifying any body parameters will result in cancelling all open orders
+        /// regardless of Product ID, Trading Type, or Side.
+        /// This method does not cancel conditional orders (take profit and stop loss on positions)
+        /// </summary>
+        /// <returns>list of all cancelled orders</returns>
+        WebCallResult<List<LiquidQuoineCancelledInBulkOrder>> CancelAll(int? productId = null, TradingType? type = null, OrderSide? side = null);
+        /// <summary>
+        /// Cancel all open orders in bulk.
+        /// Below are optional body parameters, not specifying any body parameters will result in cancelling all open orders
+        /// regardless of Product ID, Trading Type, or Side.
+        /// This method does not cancel conditional orders (take profit and stop loss on positions)
+        /// </summary>
+        /// <returns>list of all cancelled orders</returns>
+        Task<WebCallResult<List<LiquidQuoineCancelledInBulkOrder>>> CancelAllAsync(int? productId = null, TradingType? type = null, OrderSide? side = null, CancellationToken ct = default);
         /// <summary>
         /// Edit placed order
         /// </summary>
@@ -209,6 +265,22 @@ namespace LiquidQuoine.Net.Interfaces
         /// <param name="price">new order price</param>        
         /// <returns></returns>
         Task<WebCallResult<LiquidQuoinePlacedOrder>> EditOrderAsync(long orderId, decimal quantity, decimal price, CancellationToken ct = default);
+        /// <summary>
+        /// Edit placed order
+        /// </summary>
+        /// <param name="clientOrderId">client order id</param>
+        /// <param name="quantity">new order quantity</param>
+        /// <param name="price">new order price</param>        
+        /// <returns></returns>
+        WebCallResult<LiquidQuoinePlacedOrder> EditOrderByClientOrderId(string orderId,decimal quantity, decimal price);
+        /// <summary>
+        /// Edit placed order
+        /// </summary>
+        /// <param name="clientOrderId">client order id</param>
+        /// <param name="quantity">new order quantity</param>
+        /// <param name="price">new order price</param>        
+        /// <returns></returns>
+        Task<WebCallResult<LiquidQuoinePlacedOrder>> EditOrderByClientOrderIdAsync(string orderId, decimal quantity, decimal price, CancellationToken ct = default);
         /// <summary>
         /// Get an order's trades
         /// </summary>

@@ -13,6 +13,9 @@ namespace LiquidQuoine.Net.Objects
     public class LiquidQuoinePlacedOrder : LiquidQuoineBase, ICommonOrder
     {
 
+        [JsonProperty("client_order_id")]
+        public string ClientOrderId { get; set; }
+
         [JsonProperty("order_type"), JsonConverter(typeof(OrderTypeConverter))]
         public OrderType OrderType { get; set; }
 

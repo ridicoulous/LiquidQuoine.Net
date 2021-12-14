@@ -62,4 +62,11 @@
         Pong,     
         OrdersUpdated
     }
+    public enum TradingType
+    {
+        Spot,
+        Margin,
+        ContractForDifference,
+        Perpetual
+    }
 }

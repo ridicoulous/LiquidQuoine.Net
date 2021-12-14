@@ -30,9 +30,13 @@ namespace LiquidQuoine.Net
         private const string GetInterestRatesEndpoint = "ir_ladders/{}";
         private const string PlaceOrderEndpoint = "orders";
         private const string GetOrderEndpoint = "orders/{}";
+        private const string GetOrderByClOrdIdEndpoint = "orders/client:{}";
         private const string GetOrdersEndpoint = "orders";
         private const string CancelOrderEndpoint = "orders/{}/cancel";
+        private const string CancelOrderByClOrdIdEndpoint = "orders/client:{}/cancel";
+        private const string CancelOrdersInBulkEndpoint = "orders/cancel_all";
         private const string EditOrderEndpoint = "orders/{}";
+        private const string EditOrderByClOrdIdEndpoint = "/orders/client:{}";
         private const string GetOrderTradesEndpoint = "orders/{}/trades";
         private const string GetOrderExecutionsEndpoint = "orders/{}/executions";
         private const string GetMyExecutionsEndpoint = "executions/me";
@@ -303,9 +307,13 @@ namespace LiquidQuoine.Net
         /// <param name="quantity">quantity to buy or sell</param>
         /// <param name="price">price per unit of cryptocurrency</param>
         /// <param name="priceRange">For order_type of market_with_range only, slippage of the order. Use for TrailingStops</param>
+        /// <param name="clientOrderId">A self-identified Order ID, 
+        ///                             a custom unique identifying JSON string up to 36 bytes with any content (as long as it is unique). 
+        ///                             User must avoid special characters besides "-".
+        ///                             client_order_id must always be unique and not be reused.</param>
         /// <returns></returns>
-        public WebCallResult<LiquidQuoinePlacedOrder> PlaceOrder(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal? price = null, decimal? priceRange = null)
-            => PlaceOrderAsync(productId, orderSide, orderType, quantity, price, priceRange).Result;
+        public WebCallResult<LiquidQuoinePlacedOrder> PlaceOrder(int productId, OrderSide orderSide, OrderType orderType, decimal quantity, decimal? price = null, decimal? priceRange = null, string clientOrderId = null)
+            => PlaceOrderAsync(productId, orderSide, orderType, quantity, price, priceRange, clientOrderId).Result;
         /// <summary>
         /// Create an Order
         /// </summary>
@@ -315,11 +323,19 @@ namespace LiquidQuoine.Net
         /// <param name="quantity">quantity to buy or sell</param>
         /// <param name="price">price per unit of cryptocurrency</param>
         /// <param name="priceRange">For order_type of market_with_range only, slippage of the order. Use for TrailingStops</param>
+        /// <param name="clientOrderId">A self-identified Order ID, 
+        ///                             a custom unique identifying JSON string up to 36 bytes with any content (as long as it is unique). 
+        ///                             User must avoid special characters besides "-".
+        ///                             client_order_id must always be unique and not be reused.</param>
         /// <returns></returns>
         public async Task<WebCallResult<LiquidQuoinePlacedOrder>> PlaceOrderAsync(int productId,
             OrderSide orderSide,
             OrderType orderType,
-            decimal quantity, decimal? price = null, decimal? priceRange = null, CancellationToken ct = default)
+            decimal quantity,
+            decimal? price = null,
+            decimal? priceRange = null,
+            string clientOrderId = null,
+            CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object>()
             {
@@ -336,6 +352,7 @@ namespace LiquidQuoine.Net
 
             parameters.AddOptionalParameter("price", price.HasValue ? price.Value.ToString(CultureInfo.GetCultureInfo("en-US")) : null);
             parameters.AddOptionalParameter("price_range", priceRange);
+            parameters.AddOptionalParameter("client_order_id", clientOrderId);
             var order = new Dictionary<string, object>() { { "order", parameters } };
             var test = JsonConvert.SerializeObject(order);
             Console.WriteLine(test);
@@ -359,9 +376,13 @@ namespace LiquidQuoine.Net
         /// <param name="price"></param>
         /// <param name="priceRange">use it to place TrailingStop order</param>
         /// <param name="orderDirection">one_direction, two_direction or netout.</param>
+        ///  <param name="clientOrderId">A self-identified Order ID, 
+        ///                             a custom unique identifying JSON string up to 36 bytes with any content (as long as it is unique). 
+        ///                             User must avoid special characters besides "-".
+        ///                             client_order_id must always be unique and not be reused.</param>
         /// <returns></returns>
-        public WebCallResult<LiquidQuoinePlacedOrder> PlaceMarginOrder(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection = null)
-                => PlaceMarginOrderAsync(productId, orderSide, orderType, leverageLevel, fundingCurrency, quantity, price, priceRange, orderDirection).Result;
+        public WebCallResult<LiquidQuoinePlacedOrder> PlaceMarginOrder(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel, string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection = null, string clientOrderId = null)
+                => PlaceMarginOrderAsync(productId, orderSide, orderType, leverageLevel, fundingCurrency, quantity, price, priceRange, orderDirection, clientOrderId).Result;
         /// <summary>
         /// Use it to place margin order
         /// </summary>
@@ -374,9 +395,13 @@ namespace LiquidQuoine.Net
         /// <param name="price"></param>
         /// <param name="priceRange">use it to place TrailingStop order</param>
         /// <param name="orderDirection">one_direction, two_direction or netout.</param>
+        /// <param name="clientOrderId">A self-identified Order ID, 
+        ///                             a custom unique identifying JSON string up to 36 bytes with any content (as long as it is unique). 
+        ///                             User must avoid special characters besides "-".
+        ///                             client_order_id must always be unique and not be reused.</param>
         /// <returns></returns>
         public async Task<WebCallResult<LiquidQuoinePlacedOrder>> PlaceMarginOrderAsync(int productId, OrderSide orderSide, OrderType orderType, LeverageLevel leverageLevel,
-            string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection = null, CancellationToken ct = default)
+            string fundingCurrency, decimal quantity, decimal price, decimal? priceRange = null, OrderDirection? orderDirection = null, string clientOrderId = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object>()
             {
@@ -392,6 +417,7 @@ namespace LiquidQuoine.Net
                 return WebCallResult<LiquidQuoinePlacedOrder>.CreateErrorResult(new ServerError("priceRange parameter can be used only for OrderType.MarketWithRange only, slippage of the order"));
             parameters.AddOptionalParameter("price_range", priceRange);
             parameters.AddOptionalParameter("order_direction", orderDirection);
+            parameters.AddOptionalParameter("client_order_id", clientOrderId);
             var order = new Dictionary<string, object>() { { "order", parameters } };
 
             var result = await SendRequestAsync<LiquidQuoinePlacedOrder>(GetUrl(PlaceOrderEndpoint), HttpMethod.Post, ct, order, true).ConfigureAwait(false);
@@ -403,11 +429,6 @@ namespace LiquidQuoine.Net
             return result;
 
         }
-        /// <summary>
-        /// Get placed order
-        /// </summary>
-        /// <param name="orderId">order id</param>
-        /// <returns></returns>
         public WebCallResult<LiquidQuoinePlacedOrder> GetOrder(long orderId) => GetOrderAsync(orderId).Result;
         /// <summary>
         /// Get placed order
@@ -418,6 +439,23 @@ namespace LiquidQuoine.Net
         {
             return await SendRequestAsync<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(GetOrderEndpoint, orderId.ToString())), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// Get placed order
+        /// </summary>
+        /// <param name="clientOrderId">client order id</param>
+        /// <returns></returns>
+        public WebCallResult<LiquidQuoinePlacedOrder> GetOrderByClientOrderId(string clientOrderId) => GetOrderByClientOrderIdAsync(clientOrderId).Result;
+        /// <summary>
+        /// Get placed order
+        /// </summary>
+        /// <param name="clientOrderId">client order id</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<LiquidQuoinePlacedOrder>> GetOrderByClientOrderIdAsync(string clientOrderId, CancellationToken ct = default)
+        {
+            return await SendRequestAsync<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(GetOrderByClOrdIdEndpoint, clientOrderId)), HttpMethod.Get, ct, null, true).ConfigureAwait(false);
+        }
+       
         /// <summary>
         /// Cancel order
         /// </summary>
@@ -438,6 +476,64 @@ namespace LiquidQuoine.Net
             }
             return result;
         }
+        /// <summary>
+        /// Cancel order
+        /// </summary>
+        /// <param name="orderId">Order id</param>
+        /// <returns></returns>
+        public WebCallResult<LiquidQuoinePlacedOrder> CancelOrderByClientOrderId(string clientOrderId) => CancelOrderByClientOrderIdAsync(clientOrderId).Result;
+        /// <summary>
+        /// Cancel order
+        /// </summary>
+        /// <param name="orderId">Order id</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<LiquidQuoinePlacedOrder>> CancelOrderByClientOrderIdAsync(string clientOrderId, CancellationToken ct = default)
+        {
+            var result = await SendRequestAsync<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(CancelOrderByClOrdIdEndpoint, clientOrderId.ToString())), HttpMethod.Put, ct, null, true).ConfigureAwait(false);
+            if (result.Success)
+            {
+                OnOrderCanceled?.Invoke(result.Data);
+            }
+            return result;
+        }
+        /// <summary>
+        /// Cancel all open orders in bulk.
+        /// Below are optional body parameters, not specifying any body parameters will result in cancelling all open orders
+        /// regardless of Product ID, Trading Type, or Side.
+        /// This method does not cancel conditional orders (take profit and stop loss on positions)
+        /// </summary>
+        /// <returns>List of all orders that were cancelled.</returns>
+        public WebCallResult<List<LiquidQuoineCancelledInBulkOrder>> CancelAll(int? productId = null, TradingType? type = null, OrderSide? side = null) => CancelAllAsync(productId, type, side).Result;
+
+        /// <summary>
+        /// Cancel all open orders in bulk.
+        /// Below are optional body parameters, not specifying any body parameters will result in cancelling all open orders
+        /// regardless of Product ID, Trading Type, or Side.
+        /// This method does not cancel conditional orders (take profit and stop loss on positions)
+        /// </summary>
+        /// <returns>List of all orders that were cancelled.</returns>
+        public async Task<WebCallResult<List<LiquidQuoineCancelledInBulkOrder>>> CancelAllAsync(int? productId = null, TradingType? type = null, OrderSide? side = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("product_id", productId);
+            if (type != null)
+                parameters.AddOptionalParameter("trading_type", JsonConvert.SerializeObject(type, new TradingTypeConverter()));
+            if (side != null)
+                parameters.AddOptionalParameter("side", JsonConvert.SerializeObject(side, new OrderSideConverter()));
+
+            var result = await SendRequestAsync<LiquidQuoineCancelledInBulkResponse<LiquidQuoineCancelledInBulkOrder>>(GetUrl(CancelOrdersInBulkEndpoint), HttpMethod.Put, ct, parameters, true).ConfigureAwait(false); ;
+            List<LiquidQuoineCancelledInBulkOrder> orderList = null;
+            if (result.Success)
+            {
+                orderList = result.Data.Result;
+                foreach (var item in orderList)
+                {
+                    OnOrderCanceled?.Invoke(item);
+                }
+            }
+            return result.As<List<LiquidQuoineCancelledInBulkOrder>>(orderList);
+        }
+
         /// <summary>
         /// Edit placed order
         /// </summary>
@@ -462,6 +558,31 @@ namespace LiquidQuoine.Net
             var result = await SendRequestAsync<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(EditOrderEndpoint, orderId.ToString())), HttpMethod.Put, ct, parameters, true).ConfigureAwait(false);
             return result;
         }
+        /// <summary>
+        /// Edit placed order
+        /// </summary>
+        /// <param name="clientOrderId">client order id</param>
+        /// <param name="quantity">new order quantity</param>
+        /// <param name="price">new order price</param>        
+        /// <returns></returns>
+        public WebCallResult<LiquidQuoinePlacedOrder> EditOrderByClientOrderId(string clientOrderId, decimal quantity, decimal price) => EditOrderByClientOrderIdAsync(clientOrderId, quantity, price).Result;
+        /// <summary>
+        /// Edit placed order
+        /// </summary>
+        /// <param name="clientOrderId">client order id</param>
+        /// <param name="quantity">new order quantity</param>
+        /// <param name="price">new order price</param>        
+        /// <returns></returns>
+        public async Task<WebCallResult<LiquidQuoinePlacedOrder>> EditOrderByClientOrderIdAsync(string clientOrderId, decimal quantity, decimal price, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.Add("quantity", quantity);
+            parameters.Add("price", price);
+
+            var result = await SendRequestAsync<LiquidQuoinePlacedOrder>(GetUrl(FillPathParameter(EditOrderByClOrdIdEndpoint, clientOrderId)), HttpMethod.Put, ct, parameters, true).ConfigureAwait(false);
+            return result;
+        }
+
         /// <summary>
         /// Get an order's trades
         /// </summary>
@@ -817,5 +938,6 @@ namespace LiquidQuoine.Net
                 throw new ArgumentException("Can't convert \"orderId\" to type long");
             }
         }
+
     }
 }
