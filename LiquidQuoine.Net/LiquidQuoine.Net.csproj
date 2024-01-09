@@ -21,7 +21,7 @@
   <ItemGroup>
     <PackageReference Include="CryptoExchange.Net" Version="4.2.8" />
     <PackageReference Include="Pusher.NetStandard" Version="0.5.9" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.34.0" />
   </ItemGroup>
 
 </Project>
